@@ -1,0 +1,14 @@
+# Constants
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+WORLD_WIDTH = 2400  # World is 3x wider than screen
+WORLD_HEIGHT = 1200
+GROUND_HEIGHT = 50
+FPS = 60
+
+# Colors
+WHITE = (255, 255, 255)
+BLUE = (50, 150, 255)
+RED = (255, 50, 50)
+GREEN = (50, 255, 50)
+GRAY = (128, 128, 128)
