@@ -3,6 +3,7 @@ import sys
 import math
 import Geometry as Geometry
 from Player import Player
+from Frog import Frog
 import globals as GLOBAL
 
 # Initialize Pygame
@@ -71,6 +72,11 @@ def main():
         Platform(750, floor - 550, 150, 20),
     ]
 
+    # create frog
+    frog_list = []
+    frog_list.append(Frog(190, 400))
+    frog_list.append(Frog(400, floor-250-40))
+
     jump_keys = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
     
     running = True
@@ -106,6 +112,9 @@ def main():
         
         # Update camera to follow player
         camera.update(player)
+
+        for frog in frog_list:
+            frog.update(platforms)
         
         # Draw everything
         screen.fill(GLOBAL.WHITE)
@@ -128,6 +137,9 @@ def main():
         # Draw platforms
         for platform in platforms:
             platform.draw(screen, camera)
+
+        for frog in frog_list:
+            frog.draw(screen, camera)
         
         # Draw player
         player.draw(screen, camera)
