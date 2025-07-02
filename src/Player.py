@@ -19,6 +19,7 @@ class Player(Character):
         # self.vel_y = 0
         self.speed = 5
         self.jump_power = -15
+        self.floor_kills = True
         # self.jumping = False
         # self.gravity = 0.8
         # self.on_ground = False
@@ -43,6 +44,9 @@ class Player(Character):
         self.vel_x = 0
         self.vel_y = 0
         self.alive = True
+
+    def personal_update(self, camera):
+        pass
 
     # def update(self, platforms):
     #     original_ground_status = self.on_ground

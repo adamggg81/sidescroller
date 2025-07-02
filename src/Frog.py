@@ -17,9 +17,10 @@ class Frog(Character):
         self.height = 40
         # self.vel_x = 0
         # self.vel_y = 0
-        self.speed = 5
+        self.speed = 3
         # self.jump_power = -15
         self.jumping = False
+        self.floor_kills = False
         # self.gravity = 0.8
         # self.on_ground = False
         # self.alive = True
@@ -43,6 +44,12 @@ class Frog(Character):
 
         self.rect.center = (screen_x + self.width / 2, screen_y + self.height / 2)
         screen.blit(self.image, self.rect)
+
+    def personal_update(self, camera):
+        self.vel_x = 0
+
+        if self.on_ground and self.on_screen(camera):
+            self.vel_x = self.speed
 
     # def update(self, platforms):
     #     original_ground_status = self.on_ground

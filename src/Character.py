@@ -1,6 +1,7 @@
 import pygame
 import globals as GLOBAL
 import Geometry as Geometry
+from WorldObjects import WorldObjects
 
 
 class Character:
@@ -24,7 +25,7 @@ class Character:
         self.image = None
         self.rect = None
 
-    def update(self, platforms):
+    def update(self, world_objects):
         original_ground_status = self.on_ground
         original_y = self.y
         # Apply gravity
@@ -46,7 +47,7 @@ class Character:
             if self.floor_kills:
                 self.alive = False
 
-        [is_on_platform, target_platform] = Geometry.platform_collision(self, platforms)
+        [is_on_platform, target_platform] = Geometry.platform_collision(self, world_objects.platforms)
         if is_on_platform:
             self.y = target_platform.rect.y - self.height
             self.on_ground = True
@@ -62,10 +63,15 @@ class Character:
         elif self.x + self.width > GLOBAL.WORLD_WIDTH:
             self.x = GLOBAL.WORLD_WIDTH - self.width
 
-        if not self.alive:
+        if self.alive:
+            self.personal_update(world_objects.camera)
+        else:
             self.die()
 
     def die(self):
+        pass
+
+    def personal_update(self, camera):
         pass
 
     def on_screen(self, camera):
