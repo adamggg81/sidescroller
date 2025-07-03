@@ -27,6 +27,16 @@ def rectangle_rectangle_intersection(rect1_list, rect2_list):
     return result
 
 
+def character_collision(victim, aggressor):
+    result = False
+    victim_rect = [victim.x, victim.y, victim.width, victim.height]
+    aggressor_rect = [aggressor.x, aggressor.y, aggressor.width, aggressor.height]
+    if rectangle_rectangle_intersection(victim_rect, aggressor_rect):
+        result = True
+
+    return result
+
+
 def platform_collision(walker, platforms):
     result = False
     collision_platform = None

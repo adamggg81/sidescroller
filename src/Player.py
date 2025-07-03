@@ -3,6 +3,7 @@ import math
 import Geometry as Geometry
 import globals as GLOBAL
 from Character import Character
+from WorldObjects import WorldObjects
 
 
 class Player(Character):
@@ -45,8 +46,10 @@ class Player(Character):
         self.vel_y = 0
         self.alive = True
 
-    def personal_update(self, camera):
-        pass
+    def personal_update(self, world_objects: WorldObjects):
+        for frog in world_objects.frog:
+            if Geometry.character_collision(self, frog):
+                self.die()
 
     # def update(self, platforms):
     #     original_ground_status = self.on_ground

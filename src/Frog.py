@@ -18,12 +18,12 @@ class Frog(Character):
         self.height = 40
         # self.vel_x = 0
         # self.vel_y = 0
-        self.speed = 3
+        self.speed = 2.5
         self.jump_power = -20
         self.jumping = False
         self.floor_kills = False
         self.jump_timer = 0
-        self.jump_threshold = 1
+        self.jump_threshold = 1.2
         # self.gravity = 0.8
         # self.on_ground = False
         # self.alive = True
@@ -53,6 +53,11 @@ class Frog(Character):
         # it continues moving in whatever horizontal direction during a jump
         if self.on_ground:
             self.vel_x = 0
+        elif self.bounce_timer > 0.3:
+            if self.vel_x > 0:
+                self.vel_x = self.speed
+            elif self.vel_x < 0:
+                self.vel_x = -1*self.speed
 
         # whenever the jump_timer crosses the jump_threshold, frog is allowed to jump again
         self.jump_timer = self.jump_timer + 1/world_objects.fps
@@ -66,6 +71,22 @@ class Frog(Character):
                 self.vel_x = self.speed
             if self.jump_timer == 0:
                 self.vel_y = self.jump_power
+
+        for frog in world_objects.frog:
+            if frog != self:
+                if Geometry.character_collision(self, frog):
+                    self.bounce_timer = 0
+                    frog.bounce_timer = 0
+                    bounce_mult = 2
+                    if self.x > frog.x:
+                        self.vel_x = bounce_mult*self.speed
+                        frog.vel_x = -bounce_mult*frog.speed
+                        frog.x = self.x - frog.width
+                    else:
+                        self.vel_x = -bounce_mult*self.speed
+                        frog.vel_x = bounce_mult*frog.speed
+                        frog.x = self.x + self.width
+                    break
 
 
     # def update(self, platforms):

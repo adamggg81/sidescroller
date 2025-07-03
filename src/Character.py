@@ -19,6 +19,7 @@ class Character:
         self.on_ground = False
         self.floor_kills = True
         self.alive = True
+        self.bounce_timer = 0
         self.initial_x = x
         self.initial_y = y
         self.image_list = []
@@ -36,6 +37,8 @@ class Character:
         self.y += self.vel_y
 
         self.on_ground = False
+
+        self.bounce_timer = self.bounce_timer + 1/world_objects.fps
 
         # Ground collision (simple floor at bottom of screen)
         if self.y + self.height >= GLOBAL.WORLD_HEIGHT - GLOBAL.GROUND_HEIGHT:
