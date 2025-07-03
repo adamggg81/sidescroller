@@ -7,3 +7,4 @@ class WorldObjects:
         self.camera = None
         self.platforms = None
         self.frog = None
+        self.fps = 0

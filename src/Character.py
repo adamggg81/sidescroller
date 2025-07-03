@@ -64,7 +64,7 @@ class Character:
             self.x = GLOBAL.WORLD_WIDTH - self.width
 
         if self.alive:
-            self.personal_update(world_objects.camera)
+            self.personal_update(world_objects)
         else:
             self.die()
 

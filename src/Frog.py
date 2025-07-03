@@ -3,6 +3,7 @@ import math
 import Geometry as Geometry
 import globals as GLOBAL
 from Character import Character
+from WorldObjects import WorldObjects
 
 
 class Frog(Character):
@@ -18,9 +19,11 @@ class Frog(Character):
         # self.vel_x = 0
         # self.vel_y = 0
         self.speed = 3
-        # self.jump_power = -15
+        self.jump_power = -20
         self.jumping = False
         self.floor_kills = False
+        self.jump_timer = 0
+        self.jump_threshold = 1
         # self.gravity = 0.8
         # self.on_ground = False
         # self.alive = True
@@ -45,11 +48,25 @@ class Frog(Character):
         self.rect.center = (screen_x + self.width / 2, screen_y + self.height / 2)
         screen.blit(self.image, self.rect)
 
-    def personal_update(self, camera):
-        self.vel_x = 0
+    def personal_update(self, world_objects: WorldObjects):
+        # reset x velocity when frog is on the ground
+        # it continues moving in whatever horizontal direction during a jump
+        if self.on_ground:
+            self.vel_x = 0
 
-        if self.on_ground and self.on_screen(camera):
-            self.vel_x = self.speed
+        # whenever the jump_timer crosses the jump_threshold, frog is allowed to jump again
+        self.jump_timer = self.jump_timer + 1/world_objects.fps
+        if self.jump_timer > self.jump_threshold:
+            self.jump_timer = 0
+
+        if self.on_ground and self.on_screen(world_objects.camera):
+            if self.x > world_objects.Player.x:
+                self.vel_x = -1*self.speed
+            else:
+                self.vel_x = self.speed
+            if self.jump_timer == 0:
+                self.vel_y = self.jump_power
+
 
     # def update(self, platforms):
     #     original_ground_status = self.on_ground

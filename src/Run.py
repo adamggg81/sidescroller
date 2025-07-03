@@ -80,12 +80,15 @@ def main():
 
     jump_keys = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
 
+    actual_fps = GLOBAL.FPS
+
     world_objects = WorldObjects()
     world_objects.Player = player
     world_objects.camera = camera
     world_objects.platforms = platforms
     world_objects.frog = frog_list
-    
+    world_objects.fps = actual_fps
+
     running = True
     while running:
         # Handle events
@@ -166,6 +169,12 @@ def main():
         
         pygame.display.flip()
         clock.tick(GLOBAL.FPS)
+
+        # Get the actual FPS
+        actual_fps = clock.get_fps()
+        if actual_fps < 1:
+            actual_fps = GLOBAL.FPS
+        world_objects.fps = actual_fps
     
     pygame.quit()
     sys.exit()
@@ -173,3 +182,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
