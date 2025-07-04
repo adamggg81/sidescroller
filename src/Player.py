@@ -21,6 +21,7 @@ class Player(Character):
         self.speed = 5
         self.jump_power = -15
         self.floor_kills = True
+        self.god_mode = False
         # self.jumping = False
         # self.gravity = 0.8
         # self.on_ground = False
@@ -40,11 +41,16 @@ class Player(Character):
         self.rect = self.image.get_rect()
 
     def die(self):
+        if self.god_mode:
+            return
+        if self.invincible_timer < self.invincible_threshold:
+            return
         self.x = self.initial_x
         self.y = self.initial_y
         self.vel_x = 0
         self.vel_y = 0
         self.alive = True
+        self.invincible_timer = 0
 
     def personal_update(self, world_objects: WorldObjects):
         for frog in world_objects.frog:

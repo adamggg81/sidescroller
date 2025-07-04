@@ -53,7 +53,7 @@ class Frog(Character):
         # it continues moving in whatever horizontal direction during a jump
         if self.on_ground:
             self.vel_x = 0
-        elif self.bounce_timer > 0.3:
+        elif self.bounce_timer >= self.bounce_threshold:
             if self.vel_x > 0:
                 self.vel_x = self.speed
             elif self.vel_x < 0:

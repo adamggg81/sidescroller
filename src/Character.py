@@ -20,6 +20,9 @@ class Character:
         self.floor_kills = True
         self.alive = True
         self.bounce_timer = 0
+        self.bounce_threshold = 0.3
+        self.invincible_timer = 0
+        self.invincible_threshold = 1.5
         self.initial_x = x
         self.initial_y = y
         self.image_list = []
@@ -39,6 +42,12 @@ class Character:
         self.on_ground = False
 
         self.bounce_timer = self.bounce_timer + 1/world_objects.fps
+        if self.bounce_timer > self.bounce_threshold:
+            self.bounce_timer = self.bounce_threshold
+
+        self.invincible_timer = self.invincible_timer + 1 / world_objects.fps
+        if self.invincible_timer > self.invincible_threshold:
+            self.invincible_timer = self.invincible_threshold
 
         # Ground collision (simple floor at bottom of screen)
         if self.y + self.height >= GLOBAL.WORLD_HEIGHT - GLOBAL.GROUND_HEIGHT:
@@ -63,8 +72,10 @@ class Character:
         # Keep player within world boundaries
         if self.x < 0:
             self.x = 0
+            self.vel_x = -1 * self.vel_x
         elif self.x + self.width > GLOBAL.WORLD_WIDTH:
             self.x = GLOBAL.WORLD_WIDTH - self.width
+            self.vel_x = -1*self.vel_x
 
         if self.alive:
             self.personal_update(world_objects)

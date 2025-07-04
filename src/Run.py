@@ -77,6 +77,9 @@ def main():
     frog_list = []
     frog_list.append(Frog(600, floor-300))
     frog_list.append(Frog(800, floor-250-40))
+    frog_list.append(Frog(2100, floor - 250 - 40))
+    frog_list.append(Frog(750, 590))
+    frog_list.append(Frog(1250, 750))
 
     jump_keys = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
 
@@ -116,6 +119,11 @@ def main():
                 break
         # if keys[pygame.K_SPACE] or keys[pygame.K_UP] or keys[pygame.K_w]:
         #     player.jump()
+
+        if keys[pygame.K_g]:
+            player.god_mode = True
+        if keys[pygame.K_h]:
+            player.god_mode = False
         
         # Update player
         player.update(world_objects)
