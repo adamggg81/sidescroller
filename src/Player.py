@@ -55,7 +55,13 @@ class Player(Character):
     def personal_update(self, world_objects: WorldObjects):
         for frog in world_objects.frog:
             if Geometry.character_collision(self, frog):
-                self.die()
+                if self.y + self.height - self.vel_y < frog.y - frog.vel_y:
+                    self.y = frog.y - self.height
+                    self.vel_y = 0.75*self.jump_power
+                    frog.vel_y = 0
+                    frog.stun_timer = 0
+                else:
+                    self.die()
 
     # def update(self, platforms):
     #     original_ground_status = self.on_ground

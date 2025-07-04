@@ -23,6 +23,8 @@ class Character:
         self.bounce_threshold = 0.3
         self.invincible_timer = 0
         self.invincible_threshold = 1.5
+        self.stun_threshold = 1
+        self.stun_timer = self.stun_threshold
         self.initial_x = x
         self.initial_y = y
         self.image_list = []
@@ -48,6 +50,10 @@ class Character:
         self.invincible_timer = self.invincible_timer + 1 / world_objects.fps
         if self.invincible_timer > self.invincible_threshold:
             self.invincible_timer = self.invincible_threshold
+
+        self.stun_timer = self.stun_timer + 1 / world_objects.fps
+        if self.stun_timer > self.stun_threshold:
+            self.stun_timer = self.stun_threshold
 
         # Ground collision (simple floor at bottom of screen)
         if self.y + self.height >= GLOBAL.WORLD_HEIGHT - GLOBAL.GROUND_HEIGHT:
@@ -76,6 +82,10 @@ class Character:
         elif self.x + self.width > GLOBAL.WORLD_WIDTH:
             self.x = GLOBAL.WORLD_WIDTH - self.width
             self.vel_x = -1*self.vel_x
+
+        if self.y < 0:
+            self.y = 0
+            self.vel_y = 0
 
         if self.alive:
             self.personal_update(world_objects)

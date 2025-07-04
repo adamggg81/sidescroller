@@ -64,13 +64,14 @@ class Frog(Character):
         if self.jump_timer > self.jump_threshold:
             self.jump_timer = 0
 
-        if self.on_ground and self.on_screen(world_objects.camera):
+        if self.on_ground and self.on_screen(world_objects.camera) and self.stun_timer >= self.stun_threshold:
             if self.x > world_objects.Player.x:
                 self.vel_x = -1*self.speed
             else:
                 self.vel_x = self.speed
             if self.jump_timer == 0:
                 self.vel_y = self.jump_power
+
 
         for frog in world_objects.frog:
             if frog != self:
