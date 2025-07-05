@@ -59,15 +59,25 @@ class Player(Character):
         self.invincible_timer = 0
 
     def personal_update(self, world_objects: WorldObjects):
+        bounce_up = False
+        top_bounce = GLOBAL.WORLD_HEIGHT
         for frog in world_objects.frog:
             if Geometry.character_collision(self, frog):
                 if self.y + self.height - self.vel_y < frog.y - frog.vel_y:
-                    self.y = frog.y - self.height
-                    self.vel_y = 0.75*self.jump_power
+                    if frog.y - self.height < top_bounce:
+                        top_bounce = frog.y - self.height
+                    bounce_up = True
                     frog.vel_y = 0
                     frog.stun_timer = 0
                 else:
                     self.die()
+
+        # There was a bug when multiple enemies were bounced upon
+        # After setting position and velocity for the first collision, the second caused death
+        # The fix is to wait until after all collisions are resolved to set position and velocity
+        if bounce_up:
+            self.vel_y = 0.75*self.jump_power
+            self.y = top_bounce
 
     # def update(self, platforms):
     #     original_ground_status = self.on_ground
