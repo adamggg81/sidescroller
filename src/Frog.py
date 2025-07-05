@@ -24,12 +24,9 @@ class Frog(Character):
         self.floor_kills = False
         self.jump_timer = 0
         self.jump_threshold = 1.2
-        # self.gravity = 0.8
-        # self.on_ground = False
-        # self.alive = True
-        # self.initial_x = x
-        # self.initial_y = y
-        # self.image_list = []
+        self.current_direction = 0
+        self.change_direction_timer = 0
+        self.change_direction_threshold = 0.5
 
         # self.image = pygame.image.load("player.png").convert_alpha()
         image_list = ["frog.png"]
@@ -59,11 +56,25 @@ class Frog(Character):
         if self.jump_timer > self.jump_threshold:
             self.jump_timer = 0
 
+        # whenever the change direction timer crosses the threshold, frog is allowed to change direction
+        self.change_direction_timer = self.change_direction_timer + 1 / world_objects.fps
+        if self.change_direction_timer > self.change_direction_threshold:
+            self.change_direction_timer = 0
+
         if self.on_ground and self.on_screen(world_objects.camera) and self.stun_timer >= self.stun_threshold:
-            if self.x > world_objects.Player.x:
-                self.vel_x = -1*self.speed
+            # Follow the player
+            # But there is a lag based on change_direction timer to prevent it looking so robotic
+            # Exception for when the frog will jump so it doesn't jump away
+            if self.change_direction_timer == 0 or self.jump_timer == 0:
+                if self.x > world_objects.Player.x:
+                    self.current_direction = -1
+                else:
+                    self.current_direction = 1
+                self.vel_x = self.current_direction * self.speed
             else:
-                self.vel_x = self.speed
+                self.vel_x = self.current_direction * self.speed
+
+            # when the jump timer refreshes, jump again
             if self.jump_timer == 0:
                 self.vel_y = self.jump_power
 
@@ -72,11 +83,13 @@ class Frog(Character):
                 if Geometry.character_collision(self, frog):
                     bounce_mult = 2
                     if self.x > frog.x:
-                        self.vel_x = bounce_mult*self.speed
-                        frog.vel_x = -bounce_mult*frog.speed
+                        self.current_direction = 1
+                        frog.current_direction = -1
                         frog.x = self.x - frog.width
                     else:
-                        self.vel_x = -bounce_mult*self.speed
-                        frog.vel_x = bounce_mult*frog.speed
+                        self.current_direction = -1
+                        frog.current_direction = 1
                         frog.x = self.x + self.width
+                    self.vel_x = self.current_direction * bounce_mult * self.speed
+                    frog.vel_x = frog.current_direction * bounce_mult * frog.speed
                     break
