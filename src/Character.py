@@ -23,6 +23,7 @@ class Character:
         self.invincible_threshold = 1.5
         self.stun_threshold = 1
         self.stun_timer = self.stun_threshold
+        self.current_platform = None
         self.initial_x = x
         self.initial_y = y
         self.image_number = 0
@@ -66,6 +67,7 @@ class Character:
         if is_on_platform:
             self.y = target_platform.rect.y - self.height
             self.on_ground = True
+            self.current_platform = target_platform
         elif wall_collision == -1:
             self.x = target_platform.rect.x - self.width
             self.vel_x = 0
