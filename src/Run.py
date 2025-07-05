@@ -3,6 +3,7 @@ import sys
 import math
 from Player import Player
 from Frog import Frog
+from Mouse import Mouse
 import globals as GLOBAL
 from WorldObjects import WorldObjects
 
@@ -73,12 +74,12 @@ def main():
     ]
 
     # create frog
-    frog_list = []
-    frog_list.append(Frog(600, floor-300))
-    frog_list.append(Frog(800, floor-250-40))
-    frog_list.append(Frog(2100, floor - 250 - 40))
-    frog_list.append(Frog(750, 590))
-    frog_list.append(Frog(1250, 750))
+    enemy_list = []
+    enemy_list.append(Frog(600, floor-300))
+    enemy_list.append(Frog(800, floor-250-40))
+    enemy_list.append(Frog(2100, floor - 250 - 40))
+    enemy_list.append(Mouse(750, 590))
+    enemy_list.append(Frog(1250, 750))
 
     jump_keys = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
 
@@ -88,7 +89,7 @@ def main():
     world_objects.Player = player
     world_objects.camera = camera
     world_objects.platforms = platforms
-    world_objects.Enemy = frog_list
+    world_objects.Enemy = enemy_list
     world_objects.fps = actual_fps
 
     running = True
@@ -129,8 +130,8 @@ def main():
         # Update camera to follow player
         camera.update(player)
 
-        for frog in frog_list:
-            frog.update(world_objects)
+        for enemy in enemy_list:
+            enemy.update(world_objects)
         
         # Draw everything
         screen.fill(GLOBAL.WHITE)
@@ -154,8 +155,8 @@ def main():
         for platform in platforms:
             platform.draw(screen, camera)
 
-        for frog in frog_list:
-            frog.draw(screen, camera)
+        for enemy in enemy_list:
+            enemy.draw(screen, camera)
         
         # Draw player
         player.draw(screen, camera)
@@ -170,7 +171,7 @@ def main():
                                f"Camera Y: {int(camera.y)}", True, (0, 0, 0))
         screen.blit(pos_text, (10, 50))
 
-        pos_text = font.render(f"Frog2 on screen: {int(frog_list[1].on_screen(camera))}", True, (0, 0, 0))
+        pos_text = font.render(f"Enemy2 on screen: {int(enemy_list[1].on_screen(camera))}", True, (0, 0, 0))
         screen.blit(pos_text, (10, 100))
         
         pygame.display.flip()

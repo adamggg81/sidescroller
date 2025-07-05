@@ -13,12 +13,8 @@ class Frog(Enemy):
         # call init for Enemy
         super().__init__(x, y)
 
-        # self.x = x
-        # self.y = y
         self.width = 40
         self.height = 40
-        # self.vel_x = 0
-        # self.vel_y = 0
         self.speed = 2.5
         self.jump_power = -20
         self.jumping = False
