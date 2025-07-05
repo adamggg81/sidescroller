@@ -80,12 +80,15 @@ class Player(Character):
         top_bounce = GLOBAL.WORLD_HEIGHT
         for enemy in world_objects.Enemy:
             if Geometry.character_collision(self, enemy):
-                if self.y + self.height - self.vel_y < enemy.y - enemy.vel_y:
-                    if enemy.y - self.height < top_bounce:
-                        top_bounce = enemy.y - self.height
-                    bounce_up = True
-                    enemy.vel_y = 0
-                    enemy.stun_timer = 0
+                if enemy.jump_on_head:
+                    if self.y + self.height - self.vel_y < enemy.y - enemy.vel_y:
+                        if enemy.y - self.height < top_bounce:
+                            top_bounce = enemy.y - self.height
+                        bounce_up = True
+                        enemy.vel_y = 0
+                        enemy.stun_timer = 0
+                    else:
+                        self.die()
                 else:
                     self.die()
 

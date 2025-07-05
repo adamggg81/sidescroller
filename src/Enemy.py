@@ -12,6 +12,7 @@ class Enemy(Character):
         # call init for Character
         super().__init__(x, y)
 
+        self.jump_on_head = True
         self.current_direction = 0
         self.change_direction_timer = 0
         self.change_direction_threshold = 0.75
