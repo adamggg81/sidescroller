@@ -42,6 +42,7 @@ class Player(Character):
 
     def die(self):
         if self.god_mode:
+            self.alive = True
             return
         if self.invincible_timer < self.invincible_threshold:
             return

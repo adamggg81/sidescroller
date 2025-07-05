@@ -19,8 +19,6 @@ class Character:
         self.on_ground = False
         self.floor_kills = True
         self.alive = True
-        self.bounce_timer = 0
-        self.bounce_threshold = 0.3
         self.invincible_timer = 0
         self.invincible_threshold = 1.5
         self.stun_threshold = 1
@@ -31,7 +29,7 @@ class Character:
         self.image = None
         self.rect = None
 
-    def update(self, world_objects):
+    def update(self, world_objects: WorldObjects):
         original_ground_status = self.on_ground
         original_y = self.y
         # Apply gravity
@@ -42,10 +40,6 @@ class Character:
         self.y += self.vel_y
 
         self.on_ground = False
-
-        self.bounce_timer = self.bounce_timer + 1/world_objects.fps
-        if self.bounce_timer > self.bounce_threshold:
-            self.bounce_timer = self.bounce_threshold
 
         self.invincible_timer = self.invincible_timer + 1 / world_objects.fps
         if self.invincible_timer > self.invincible_threshold:
