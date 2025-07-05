@@ -26,7 +26,7 @@ class Frog(Character):
         self.jump_threshold = 1.2
         self.current_direction = 0
         self.change_direction_timer = 0
-        self.change_direction_threshold = 0.5
+        self.change_direction_threshold = 0.75
 
         # self.image = pygame.image.load("player.png").convert_alpha()
         image_list = ["frog.png"]
@@ -59,17 +59,18 @@ class Frog(Character):
         # whenever the change direction timer crosses the threshold, frog is allowed to change direction
         self.change_direction_timer = self.change_direction_timer + 1 / world_objects.fps
         if self.change_direction_timer > self.change_direction_threshold:
-            self.change_direction_timer = 0
+            self.change_direction_timer = self.change_direction_threshold
 
         if self.on_ground and self.on_screen(world_objects.camera) and self.stun_timer >= self.stun_threshold:
             # Follow the player
             # But there is a lag based on change_direction timer to prevent it looking so robotic
             # Exception for when the frog will jump so it doesn't jump away
-            if self.change_direction_timer == 0 or self.jump_timer == 0:
+            if self.change_direction_timer == self.change_direction_threshold or self.jump_timer == 0:
                 if self.x > world_objects.Player.x:
                     self.current_direction = -1
                 else:
                     self.current_direction = 1
+                self.change_direction_timer = 0
                 self.vel_x = self.current_direction * self.speed
             else:
                 self.vel_x = self.current_direction * self.speed
@@ -92,4 +93,6 @@ class Frog(Character):
                         frog.x = self.x + self.width
                     self.vel_x = self.current_direction * bounce_mult * self.speed
                     frog.vel_x = frog.current_direction * bounce_mult * frog.speed
+                    self.change_direction_timer = 0
+                    frog.change_direction_timer = 0
                     break
