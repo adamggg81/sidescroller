@@ -1,7 +1,6 @@
 import pygame
 import sys
 import math
-import Geometry as Geometry
 from Player import Player
 from Frog import Frog
 import globals as GLOBAL

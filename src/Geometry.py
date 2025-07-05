@@ -77,18 +77,3 @@ def platform_collision(walker, platforms):
                             return result, collision_platform
 
     return result, collision_platform
-
-
-# def above_polygon(A_ymax, B_ymin):
-#     result = False
-#     if A_ymax < B_ymin:
-#         result = True
-#     return result
-#
-#
-# def below_polygon(A_ymin, B_ymax):
-#     result = False
-#     if A_ymin > B_ymax:
-#         result = True
-#     return result
-
