@@ -108,16 +108,15 @@ def main():
         player.stop_horizontal()
         
         # Movement controls
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            player.move_left()
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            player.move_right()
-        for j in range(len(jump_keys)):
-            if keys[jump_keys[j]]:
-                player.jump()
-                break
-        # if keys[pygame.K_SPACE] or keys[pygame.K_UP] or keys[pygame.K_w]:
-        #     player.jump()
+        if player.alive:
+            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                player.move_left()
+            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                player.move_right()
+            for j in range(len(jump_keys)):
+                if keys[jump_keys[j]]:
+                    player.jump()
+                    break
 
         if keys[pygame.K_g]:
             player.god_mode = True

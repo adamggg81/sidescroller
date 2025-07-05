@@ -22,6 +22,8 @@ class Player(Character):
         self.jump_power = -15
         self.floor_kills = True
         self.god_mode = False
+        self.respawn_timer = 0
+        self.respawn_threshold = 1
         # self.jumping = False
         # self.gravity = 0.8
         # self.on_ground = False
@@ -47,10 +49,15 @@ class Player(Character):
 
     def die(self):
         if self.god_mode:
-            self.alive = True
             return
         if self.invincible_timer < self.invincible_threshold:
             return
+        if not self.alive:
+            return
+        self.alive = False
+        self.respawn_timer = 0
+
+    def respawn(self):
         self.x = self.initial_x
         self.y = self.initial_y
         self.vel_x = 0
@@ -59,6 +66,16 @@ class Player(Character):
         self.invincible_timer = 0
 
     def personal_update(self, world_objects: WorldObjects):
+
+        self.respawn_timer = self.respawn_timer + 1 / world_objects.fps
+        if self.respawn_timer > self.respawn_threshold:
+            self.respawn_timer = self.respawn_threshold
+
+        if not self.alive:
+            if self.respawn_timer == self.respawn_threshold:
+                self.respawn()
+            return
+
         bounce_up = False
         top_bounce = GLOBAL.WORLD_HEIGHT
         for frog in world_objects.frog:
@@ -101,6 +118,10 @@ class Player(Character):
         screen_x = self.x - camera.x
         screen_y = self.y - camera.y
         # pygame.draw.rect(screen, BLUE, (screen_x, screen_y, self.width, self.height))
+
+        # when player is dead, don't draw anything
+        if not self.alive:
+            return
 
         if self.vel_x > 0:
             self.image_number = 0

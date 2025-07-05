@@ -42,6 +42,8 @@ class Character:
 
         self.on_ground = False
 
+        is_killed = False
+
         self.invincible_timer = self.invincible_timer + 1 / world_objects.fps
         if self.invincible_timer > self.invincible_threshold:
             self.invincible_timer = self.invincible_threshold
@@ -58,7 +60,7 @@ class Character:
 
             # check if floor kills
             if self.floor_kills:
-                self.alive = False
+                is_killed = True
 
         [is_on_platform, target_platform] = Geometry.platform_collision(self, world_objects.platforms)
         if is_on_platform:
@@ -82,9 +84,9 @@ class Character:
             self.y = 0
             self.vel_y = 0
 
-        if self.alive:
-            self.personal_update(world_objects)
-        else:
+        self.personal_update(world_objects)
+
+        if is_killed:
             self.die()
 
     def die(self):
