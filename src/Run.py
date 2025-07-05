@@ -88,7 +88,7 @@ def main():
     world_objects.Player = player
     world_objects.camera = camera
     world_objects.platforms = platforms
-    world_objects.frog = frog_list
+    world_objects.Enemy = frog_list
     world_objects.fps = actual_fps
 
     running = True

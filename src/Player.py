@@ -78,14 +78,14 @@ class Player(Character):
 
         bounce_up = False
         top_bounce = GLOBAL.WORLD_HEIGHT
-        for frog in world_objects.frog:
-            if Geometry.character_collision(self, frog):
-                if self.y + self.height - self.vel_y < frog.y - frog.vel_y:
-                    if frog.y - self.height < top_bounce:
-                        top_bounce = frog.y - self.height
+        for enemy in world_objects.Enemy:
+            if Geometry.character_collision(self, enemy):
+                if self.y + self.height - self.vel_y < enemy.y - enemy.vel_y:
+                    if enemy.y - self.height < top_bounce:
+                        top_bounce = enemy.y - self.height
                     bounce_up = True
-                    frog.vel_y = 0
-                    frog.stun_timer = 0
+                    enemy.vel_y = 0
+                    enemy.stun_timer = 0
                 else:
                     self.die()
 

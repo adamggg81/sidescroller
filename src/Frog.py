@@ -3,13 +3,14 @@ import math
 import Geometry as Geometry
 import globals as GLOBAL
 from Character import Character
+from Enemy import Enemy
 from WorldObjects import WorldObjects
 
 
-class Frog(Character):
+class Frog(Enemy):
     def __init__(self, x, y):
 
-        # call init for Character
+        # call init for Enemy
         super().__init__(x, y)
 
         # self.x = x
@@ -45,7 +46,7 @@ class Frog(Character):
         self.rect.center = (screen_x + self.width / 2, screen_y + self.height / 2)
         screen.blit(self.image, self.rect)
 
-    def personal_update(self, world_objects: WorldObjects):
+    def enemy_update(self, world_objects: WorldObjects):
         # reset x velocity when frog is on the ground
         # it continues moving in whatever horizontal direction during a jump
         if self.on_ground:
@@ -79,20 +80,3 @@ class Frog(Character):
             if self.jump_timer == 0:
                 self.vel_y = self.jump_power
 
-        for frog in world_objects.frog:
-            if frog != self:
-                if Geometry.character_collision(self, frog):
-                    bounce_mult = 2
-                    if self.x > frog.x:
-                        self.current_direction = 1
-                        frog.current_direction = -1
-                        frog.x = self.x - frog.width
-                    else:
-                        self.current_direction = -1
-                        frog.current_direction = 1
-                        frog.x = self.x + self.width
-                    self.vel_x = self.current_direction * bounce_mult * self.speed
-                    frog.vel_x = frog.current_direction * bounce_mult * frog.speed
-                    self.change_direction_timer = 0
-                    frog.change_direction_timer = 0
-                    break

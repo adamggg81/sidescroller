@@ -92,7 +92,7 @@ class Character:
     def die(self):
         pass
 
-    def personal_update(self, camera):
+    def personal_update(self, world_objects: WorldObjects):
         pass
 
     def on_screen(self, camera):

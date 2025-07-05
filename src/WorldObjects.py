@@ -6,5 +6,5 @@ class WorldObjects:
         self.Player = None
         self.camera = None
         self.platforms = None
-        self.frog = None
+        self.Enemy = None
         self.fps = 0
