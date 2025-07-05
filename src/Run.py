@@ -57,8 +57,8 @@ def main():
     floor = GLOBAL.WORLD_HEIGHT
     platforms = [
         Platform(200, floor-150, 150, 20),
-        Platform(400, floor-250, 150, 20),
-        Platform(600, floor-350, 150, 20),
+        Platform(400, floor-250, 150, 80),
+        Platform(600, floor-330, 150, 40),
         Platform(400, floor-450, 150, 20),
         Platform(800, floor-200, 150, 20),
         Platform(1000, floor-300, 150, 20),
@@ -171,8 +171,8 @@ def main():
                                f"Camera Y: {int(camera.y)}", True, (0, 0, 0))
         screen.blit(pos_text, (10, 50))
 
-        pos_text = font.render(f"Enemy2 on screen: {int(enemy_list[1].on_screen(camera))}", True, (0, 0, 0))
-        screen.blit(pos_text, (10, 100))
+        # pos_text = font.render(f"Enemy2 on screen: {int(enemy_list[1].on_screen(camera))}", True, (0, 0, 0))
+        # screen.blit(pos_text, (10, 100))
         
         pygame.display.flip()
         clock.tick(GLOBAL.FPS)

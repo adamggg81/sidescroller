@@ -62,10 +62,16 @@ class Character:
             if self.floor_kills:
                 is_killed = True
 
-        [is_on_platform, target_platform] = Geometry.platform_collision(self, world_objects.platforms)
+        [is_on_platform, target_platform, wall_collision] = Geometry.platform_collision(self, world_objects.platforms)
         if is_on_platform:
             self.y = target_platform.rect.y - self.height
             self.on_ground = True
+        elif wall_collision == -1:
+            self.x = target_platform.rect.x - self.width
+            self.vel_x = 0
+        elif wall_collision == 1:
+            self.x = target_platform.rect.x + target_platform.rect.width
+            self.vel_x = 0
 
         if self.on_ground:
             self.vel_y = 0
