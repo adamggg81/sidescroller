@@ -29,12 +29,17 @@ class Player(Character):
         # self.initial_x = x
         # self.initial_y = y
         # self.image_list = []
+        self.image_list_invincible = []
 
         # self.image = pygame.image.load("player.png").convert_alpha()
         image_list = ["coco_right.png", "coco_left.png"]
         for j in range(len(image_list)):
             self.image_list.append(pygame.image.load(image_list[j]).convert_alpha())
             self.image_list[j].set_colorkey(GLOBAL.WHITE)
+
+            invincible_image = image_list[j].replace('.png', '_invincible.png')
+            self.image_list_invincible.append(pygame.image.load(invincible_image).convert_alpha())
+            self.image_list_invincible[j].set_colorkey(GLOBAL.WHITE)
 
         self.image = self.image_list[0]
 
@@ -128,9 +133,14 @@ class Player(Character):
         # pygame.draw.rect(screen, BLUE, (screen_x, screen_y, self.width, self.height))
 
         if self.vel_x > 0:
-            self.image = self.image_list[0]
+            self.image_number = 0
         elif self.vel_x < 0:
-            self.image = self.image_list[1]
+            self.image_number = 1
+
+        self.image = self.image_list[self.image_number]
+        if self.invincible_timer < self.invincible_threshold:
+            if math.floor(self.invincible_timer / 0.1) % 4 == 0:
+                self.image = self.image_list_invincible[self.image_number]
 
         self.rect.center = (screen_x + self.width / 2, screen_y + self.height / 2)
         screen.blit(self.image, self.rect)

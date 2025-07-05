@@ -25,6 +25,7 @@ class Character:
         self.stun_timer = self.stun_threshold
         self.initial_x = x
         self.initial_y = y
+        self.image_number = 0
         self.image_list = []
         self.image = None
         self.rect = None
