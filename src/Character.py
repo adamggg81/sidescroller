@@ -19,6 +19,7 @@ class Character:
         self.on_ground = False
         self.floor_kills = True
         self.alive = True
+        self.current_direction = 0
         self.invincible_timer = 0
         self.invincible_threshold = 1.5
         self.stun_threshold = 1
@@ -58,6 +59,7 @@ class Character:
             self.y = GLOBAL.WORLD_HEIGHT - GLOBAL.GROUND_HEIGHT - self.height
             # self.vel_y = 0
             self.on_ground = True
+            self.current_platform = None
 
             # check if floor kills
             if self.floor_kills:
@@ -84,9 +86,11 @@ class Character:
         if self.x < 0:
             self.x = 0
             self.vel_x = -1 * self.vel_x
+            self.current_direction = 1
         elif self.x + self.width > GLOBAL.WORLD_WIDTH:
             self.x = GLOBAL.WORLD_WIDTH - self.width
             self.vel_x = -1*self.vel_x
+            self.current_direction = -1
 
         if self.y < 0:
             self.y = 0

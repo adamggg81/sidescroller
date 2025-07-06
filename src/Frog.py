@@ -55,11 +55,6 @@ class Frog(Enemy):
         if self.jump_timer > self.jump_threshold:
             self.jump_timer = 0
 
-        # whenever the change direction timer crosses the threshold, frog is allowed to change direction
-        self.change_direction_timer = self.change_direction_timer + 1 / world_objects.fps
-        if self.change_direction_timer > self.change_direction_threshold:
-            self.change_direction_timer = self.change_direction_threshold
-
         if self.on_ground and self.on_screen(world_objects.camera) and self.stun_timer >= self.stun_threshold:
             # Follow the player
             # But there is a lag based on change_direction timer to prevent it looking so robotic

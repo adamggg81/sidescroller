@@ -17,7 +17,7 @@ class Mouse(Enemy):
         self.height = 34
         self.speed = 2
         # Mouse jump power is only to bounce when enemy jumps up into Mouse's feet
-        self.jump_power = -10
+        self.jump_power = -20
         self.jumping = False
         self.floor_kills = False
         self.jump_timer = 0
@@ -27,6 +27,9 @@ class Mouse(Enemy):
         self.current_direction = 1
         self.change_direction_timer = 0
         self.change_direction_threshold = 0.75
+
+        self.platform_bonding_threshold = 0.5
+        self.platform_bonding_timer = self.platform_bonding_threshold
 
         # self.image = pygame.image.load("player.png").convert_alpha()
         image_list = ["mouse_right.png", "mouse_left.png"]
@@ -42,9 +45,9 @@ class Mouse(Enemy):
         screen_x = self.x - camera.x
         screen_y = self.y - camera.y
 
-        if self.current_direction == 1:
+        if self.vel_x > 0:
             self.image_number = 0
-        elif self.current_direction == -1:
+        elif self.vel_x < 0:
             self.image_number = 1
 
         self.image = self.image_list[self.image_number]
@@ -55,13 +58,18 @@ class Mouse(Enemy):
     def enemy_update(self, world_objects: WorldObjects):
 
         self.vel_x = self.current_direction * self.speed
-        if self.on_ground and self.current_platform is not None:
+        if self.on_ground and self.current_platform is not None and self.platform_bonding_timer >= self.platform_bonding_threshold:
             platform = self.current_platform
-            if self.vel_x > 0 and self.x + self.width > platform.rect.x + platform.rect.width:
+            platform_min = platform.rect.x
+            platform_max = platform_min + platform.rect.width
+            if self.vel_x > 0 and self.x + self.width > platform_max:
                 self.vel_x = -1*self.speed
-                self.x = platform.rect.x + platform.rect.width - self.width
+                self.x = platform_max - self.width
                 self.current_direction = -1
-            elif self.vel_x < 0 and self.x < platform.rect.x:
+            elif self.vel_x < 0 and self.x < platform_min:
                 self.vel_x = self.speed
-                self.x = platform.rect.x
+                self.x = platform_min
                 self.current_direction = 1
+
+        if self.stun_timer < self.stun_threshold:
+            self.vel_x = 0

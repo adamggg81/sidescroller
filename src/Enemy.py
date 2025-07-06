@@ -13,11 +13,23 @@ class Enemy(Character):
         super().__init__(x, y)
 
         self.jump_on_head = True
-        self.current_direction = 0
         self.change_direction_timer = 0
         self.change_direction_threshold = 0.75
 
+        self.platform_bonding_threshold = 0
+        self.platform_bonding_timer = 0
+
     def personal_update(self, world_objects: WorldObjects):
+
+        # whenever the change direction timer crosses the threshold, frog is allowed to change direction
+        self.change_direction_timer = self.change_direction_timer + 1 / world_objects.fps
+        if self.change_direction_timer > self.change_direction_threshold:
+            self.change_direction_timer = self.change_direction_threshold
+
+        # platform bonding timer
+        self.platform_bonding_timer = self.platform_bonding_timer + 1 / world_objects.fps
+        if self.platform_bonding_timer > self.platform_bonding_threshold:
+            self.platform_bonding_timer = self.platform_bonding_threshold
 
         # Call the specific enemy update routine
         self.enemy_update(world_objects)
@@ -52,6 +64,9 @@ class Enemy(Character):
                         enemy.vel_x = enemy.current_direction * bounce_mult * enemy.speed
                         self.change_direction_timer = 0
                         enemy.change_direction_timer = 0
+                    # reset platform bonding timer on collision
+                    self.platform_bonding_timer = 0
+                    enemy.platform_bonding_timer = 0
                     break
 
     def enemy_update(self, world_objects: WorldObjects):

@@ -78,7 +78,7 @@ def main():
     enemy_list.append(Frog(600, floor-300))
     enemy_list.append(Frog(800, floor-250-40))
     enemy_list.append(Frog(2100, floor - 250 - 40))
-    enemy_list.append(Mouse(400, 750))
+    enemy_list.append(Mouse(600, 800))
     enemy_list.append(Frog(1250, 750))
 
     jump_keys = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
