@@ -16,7 +16,8 @@ class Mouse(Enemy):
         self.width = 50
         self.height = 34
         self.speed = 2
-        self.jump_power = 0
+        # Mouse jump power is only to bounce when enemy jumps up into Mouse's feet
+        self.jump_power = -10
         self.jumping = False
         self.floor_kills = False
         self.jump_timer = 0

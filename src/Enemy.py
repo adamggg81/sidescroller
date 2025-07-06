@@ -28,18 +28,30 @@ class Enemy(Character):
             if enemy != self:
                 if Geometry.character_collision(self, enemy):
                     bounce_mult = 2
-                    if self.x > enemy.x:
+                    direction_change = False
+                    if self.y + self.height - self.vel_y < enemy.y - enemy.vel_y:
+                        self.vel_y = 0.75 * self.jump_power
+                        self.y = enemy.y - self.height
+                        enemy.vel_y = 0
+                    elif enemy.y + enemy.height - enemy.vel_y < self.y - self.vel_y:
+                        enemy.vel_y = 0.75 * enemy.jump_power
+                        enemy.y = self.y - enemy.height
+                        self.vel_y = 0
+                    elif self.x > enemy.x:
                         self.current_direction = 1
                         enemy.current_direction = -1
                         enemy.x = self.x - enemy.width
+                        direction_change = True
                     else:
                         self.current_direction = -1
                         enemy.current_direction = 1
                         enemy.x = self.x + self.width
-                    self.vel_x = self.current_direction * bounce_mult * self.speed
-                    enemy.vel_x = enemy.current_direction * bounce_mult * enemy.speed
-                    self.change_direction_timer = 0
-                    enemy.change_direction_timer = 0
+                        direction_change = True
+                    if direction_change:
+                        self.vel_x = self.current_direction * bounce_mult * self.speed
+                        enemy.vel_x = enemy.current_direction * bounce_mult * enemy.speed
+                        self.change_direction_timer = 0
+                        enemy.change_direction_timer = 0
                     break
 
     def enemy_update(self, world_objects: WorldObjects):
