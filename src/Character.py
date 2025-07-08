@@ -20,6 +20,7 @@ class Character:
         self.floor_kills = True
         self.alive = True
         self.current_direction = 0
+        self.bounce_off_walls = False
         self.invincible_timer = 0
         self.invincible_threshold = 1.5
         self.stun_threshold = 1
@@ -72,11 +73,17 @@ class Character:
             self.current_platform = target_platform
         elif wall_collision == -1:
             self.x = target_platform.rect.x - self.width
-            self.vel_x = 0
         elif wall_collision == 1:
             self.x = target_platform.rect.x + target_platform.rect.width
-            self.vel_x = 0
+        if abs(wall_collision) == 1:
+            if self.bounce_off_walls:
+                self.vel_x = -1*self.vel_x
+                self.current_direction = -1*self.current_direction
+            else:
+                self.vel_x = 0
 
+        # set y velocity to 0 if on the ground
+        # also if gravity tries to push through the ground, reset y position
         if self.on_ground:
             self.vel_y = 0
         if original_ground_status and self.on_ground:
