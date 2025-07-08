@@ -22,12 +22,12 @@ class Cardinal(Enemy):
         self.bounce_off_walls = True
 
         self.jump_on_head = True
-        self.current_direction = -1
         self.change_direction_timer = 0
         self.change_direction_threshold = 0.75
 
         self.player_bonded = False
         self.lock_position = 0
+        self.trigger = False
 
         self.platform_bonding_threshold = 0.5
         self.platform_bonding_timer = self.platform_bonding_threshold
@@ -60,6 +60,20 @@ class Cardinal(Enemy):
 
         player = world_objects.Player
 
+        if not self.trigger:
+            self.y = self.initial_y
+            self.vel_y = 0
+            if abs(self.x - player.x) <= GLOBAL.SCREEN_WIDTH/2:
+                self.y = player.y-GLOBAL.SCREEN_HEIGHT/2
+                self.trigger = True
+                if self.x > player.x:
+                    self.current_direction = -1
+                else:
+                    self.current_direction = 1
+
+        if not self.trigger:
+            return
+
         self.vel_x = self.current_direction * self.speed
         if self.y > player.y and not self.player_bonded:
             self.y = player.y
@@ -70,7 +84,6 @@ class Cardinal(Enemy):
         if self.player_bonded:
             self.vel_y = 0
             self.y = self.lock_position
-
 
         if self.stun_timer < self.stun_threshold:
             self.vel_x = 0
