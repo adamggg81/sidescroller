@@ -8,8 +8,10 @@ class Character:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.shape = 'rectangle'
         self.width = 0
         self.height = 0
+        self.radius = 0
         self.vel_x = 0
         self.vel_y = 0
         self.speed = 0
@@ -107,6 +109,33 @@ class Character:
 
         if is_killed:
             self.die()
+
+    def character_collision(self, aggressor):
+        result = False
+        if not isinstance(aggressor, Character):
+            raise ValueError("Aggressor must also be a Character type")
+        if self.shape == 'rectangle' and aggressor.shape == 'rectangle':
+            victim_rect = [self.x, self.y, self.width, self.height]
+            aggressor_rect = [aggressor.x, aggressor.y, aggressor.width, aggressor.height]
+            if Geometry.rectangle_rectangle_intersection(victim_rect, aggressor_rect):
+                result = True
+        elif self.shape == 'rectangle' and aggressor.shape == 'circle':
+            victim_rect = [self.x, self.y, self.width, self.height]
+            aggressor_circle = [aggressor.x, aggressor.y, aggressor.radius]
+            if Geometry.rectangle_circle_intersection(victim_rect, aggressor_circle):
+                result = True
+        elif self.shape == 'circle' and aggressor.shape == 'rectangle':
+            victim_circle = [self.x, self.y, self.radius]
+            aggressor_rect = [aggressor.x, aggressor.y, aggressor.width, aggressor.height]
+            if Geometry.rectangle_circle_intersection(aggressor_rect, victim_circle):
+                result = True
+        elif self.shape == 'circle' and aggressor.shape == 'circle':
+            victim_circle = [self.x, self.y, self.radius]
+            aggressor_circle = [aggressor.x, aggressor.y, aggressor.radius]
+            if Geometry.circle_circle_intersection(victim_circle, aggressor_circle):
+                result = True
+
+        return result
 
     def die(self):
         pass

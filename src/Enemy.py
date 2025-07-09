@@ -38,7 +38,7 @@ class Enemy(Character):
         # 1:  Enemy to Enemy collision
         for enemy in world_objects.Enemy:
             if enemy != self:
-                if Geometry.character_collision(self, enemy):
+                if self.character_collision(enemy):
                     bounce_mult = 2
                     direction_change = False
                     if self.y + self.height - self.vel_y < enemy.y - enemy.vel_y:

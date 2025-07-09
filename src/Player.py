@@ -79,7 +79,7 @@ class Player(Character):
         bounce_up = False
         top_bounce = GLOBAL.WORLD_HEIGHT
         for enemy in world_objects.Enemy:
-            if Geometry.character_collision(self, enemy):
+            if self.character_collision(enemy):
                 if enemy.jump_on_head:
                     if self.y + self.height - self.vel_y <= enemy.y - enemy.vel_y:
                         if enemy.y - self.height < top_bounce:

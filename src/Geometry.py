@@ -23,16 +23,103 @@ def rectangle_rectangle_intersection(rect1_list, rect2_list):
     return result
 
 
-def point_in_polygon(x0, y0, polygon):
+def circle_circle_intersection(circle1_list, circle2_list):
+    result = False
+    circle1_x_center = circle1_list[0]
+    circle1_y_center = circle1_list[1]
+    circle1_radius = circle1_list[2]
+    circle2_x_center = circle2_list[0]
+    circle2_y_center = circle2_list[1]
+    circle2_radius = circle2_list[2]
+
+    distance = math.sqrt(math.pow(circle1_x_center - circle2_x_center, 2) +
+                         math.pow(circle1_y_center - circle2_y_center, 2))
+
+    if distance <= circle1_radius + circle2_radius:
+        result = True
+
+    return result
+
+
+def line_circle_intersection(line_type, circle_list, min_x=0, min_y=0, max_x=0, max_y=0, x=0, y=0):
+    circle_x_center = circle_list[0]
+    circle_y_center = circle_list[1]
+    circle_radius = circle_list[2]
+    # r^2 = (x-xc)^2 + (y-yc)^2
+    # y = +/-sqrt(r^2 - (x-xc)^2) + yc
+    # x = +/-sqrt(r^2 - (y-yc)^2) + xc
+
+    if line_type == 'horizontal':
+        factor = math.sqrt(circle_radius*circle_radius - math.pow(y-circle_y_center, 2))
+        xi_1 = circle_y_center + factor
+        xi_2 = circle_y_center - factor
+        if min_x <= xi_1 <= max_x:
+            return True, xi_1, xi_2
+        elif min_x <= xi_2 <= max_x:
+            return True, xi_1, xi_2
+        else:
+            return False
+    elif line_type == 'vertical':
+        factor = math.sqrt(circle_radius * circle_radius - math.pow(x - circle_x_center, 2))
+        yi_1 = circle_x_center + factor
+        yi_2 = circle_x_center - factor
+        if min_y <= yi_1 <= max_y:
+            return True
+        elif min_y <= yi_2 <= max_y:
+            return True
+        else:
+            return False
+    else:
+        pass
+
+
+def rectangle_circle_intersection(rect_list, circle_list):
+    rect_x_min = rect_list[0]
+    rect_x_max = rect_list[0] + rect_list[2]
+    rect_y_min = rect_list[1]
+    rect_y_max = rect_list[1] + rect_list[3]
+    rectangle_polygon_x = [rect_x_min, rect_x_max, rect_x_max, rect_x_min, rect_x_min]
+    rectangle_polygon_y = [rect_y_min, rect_y_min, rect_y_max, rect_y_max, rect_y_min]
+
+    circle_x_center = circle_list[0]
+    circle_y_center = circle_list[1]
+    circle_radius = circle_list[2]
+
+    # check center + radius being beyond min/max limits
+    if circle_x_center + circle_radius < rect_x_min:
+        return False
+    elif circle_y_center + circle_radius < rect_y_min:
+        return False
+    elif circle_x_center - circle_radius > rect_x_max:
+        return False
+    elif circle_y_center - circle_radius > rect_y_max:
+        return False
+    elif point_in_polygon(circle_x_center, circle_y_center, rectangle_polygon_x, rectangle_polygon_y):
+        return True
+    else:
+        # After removing the other cases, the remaining are intersections with the 4 sides of the rectangle
+        if line_circle_intersection('horizontal', circle_list, min_x=rect_x_min, max_x=rect_x_max, y=rect_y_min):
+            return True
+        elif line_circle_intersection('horizontal', circle_list, min_x=rect_x_min, max_x=rect_x_max, y=rect_y_max):
+            return True
+        if line_circle_intersection('vertical', circle_list, min_y=rect_y_min, max_y=rect_y_max, y=rect_x_min):
+            return True
+        elif line_circle_intersection('vertical', circle_list, min_y=rect_y_min, max_y=rect_y_max, y=rect_x_max):
+            return True
+        else:
+            return False
+
+
+def point_in_polygon(x0, y0, polygon_x, polygon_y):
     # Use ray-casting algorithm to determine if point is inside polygon
     # If there is an odd number of intersections, the point is inside
-    polygon_len = len(polygon.X) - 1
+    polygon_len = len(polygon_x) - 1
     counter = 0
     for k in range(polygon_len):
-        x1 = polygon.X[k]
-        x2 = polygon.X[k + 1]
-        y1 = polygon.Y[k]
-        y2 = polygon.Y[k + 1]
+        x1 = polygon_x[k]
+        x2 = polygon_x[k + 1]
+        y1 = polygon_y[k]
+        y2 = polygon_y[k + 1]
         if y0 > min(y1, y2):
             if y0 <= max(y1, y2):
                 if x0 <= max(x1, x2):
@@ -49,19 +136,9 @@ def point_in_polygon(x0, y0, polygon):
                             counter = counter+1
 
     if counter % 2 == 0:
-        return 0
+        return False
     else:
-        return 1
-
-
-def character_collision(victim, aggressor):
-    result = False
-    victim_rect = [victim.x, victim.y, victim.width, victim.height]
-    aggressor_rect = [aggressor.x, aggressor.y, aggressor.width, aggressor.height]
-    if rectangle_rectangle_intersection(victim_rect, aggressor_rect):
-        result = True
-
-    return result
+        return True
 
 
 def platform_collision(walker, platforms):
