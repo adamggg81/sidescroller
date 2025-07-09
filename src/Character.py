@@ -18,6 +18,7 @@ class Character:
         self.jump_power = 0
         self.jumping = False
         self.gravity = GLOBAL.gravity
+        self.obey_gravity = True
         self.on_ground = False
         self.floor_kills = True
         self.alive = True
@@ -39,7 +40,8 @@ class Character:
         original_ground_status = self.on_ground
         original_y = self.y
         # Apply gravity
-        self.vel_y += self.gravity
+        if self.obey_gravity:
+            self.vel_y += self.gravity
 
         # Update position
         self.x += self.vel_x

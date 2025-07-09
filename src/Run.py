@@ -5,6 +5,7 @@ from Player import Player
 from Frog import Frog
 from Mouse import Mouse
 from Cardinal import Cardinal
+from Hairball import Hairball
 import globals as GLOBAL
 from WorldObjects import WorldObjects
 
@@ -94,6 +95,10 @@ def main():
     enemy_list.append(Mouse(600, 800))
     enemy_list.append(Frog(1250, 750))
     enemy_list.append(Cardinal(1200, 200))
+    enemy_list.append(Hairball(800, floor-300))
+    enemy_list.append(Hairball(900, floor - 400))
+    enemy_list.append(Hairball(1000, floor - 500))
+    enemy_list.append(Hairball(1100, floor - 600))
 
     jump_keys = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
 
