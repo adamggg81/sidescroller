@@ -4,6 +4,7 @@ import math
 from Player import Player
 from Frog import Frog
 from Mouse import Mouse
+from Cardinal import Cardinal
 import globals as GLOBAL
 from WorldObjects import WorldObjects
 
@@ -92,6 +93,7 @@ def main():
     enemy_list.append(Frog(2100, floor - 250 - 40))
     enemy_list.append(Mouse(600, 800))
     enemy_list.append(Frog(1250, 750))
+    enemy_list.append(Cardinal(1200, 200))
 
     jump_keys = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
 
@@ -103,6 +105,8 @@ def main():
     world_objects.platforms = platforms
     world_objects.Enemy = enemy_list
     world_objects.fps = actual_fps
+
+    background_image = pygame.image.load("forest_background.png")
 
     running = True
     while running:
@@ -147,12 +151,14 @@ def main():
         
         # Draw everything
         screen.fill(GLOBAL.WHITE)
+
+        screen.blit(background_image, (0, 0))
         
-        # Draw background grid to show movement
-        for x in range(0, GLOBAL.WORLD_WIDTH, 100):
-            screen_x = x - camera.x
-            if -100 <= screen_x <= GLOBAL.SCREEN_WIDTH + 100:
-                pygame.draw.line(screen, GLOBAL.GRAY, (screen_x, 0), (screen_x, GLOBAL.SCREEN_HEIGHT), 1)
+        # # Draw background grid to show movement
+        # for x in range(0, GLOBAL.WORLD_WIDTH, 100):
+        #     screen_x = x - camera.x
+        #     if -100 <= screen_x <= GLOBAL.SCREEN_WIDTH + 100:
+        #         pygame.draw.line(screen, GLOBAL.GRAY, (screen_x, 0), (screen_x, GLOBAL.SCREEN_HEIGHT), 1)
         
         # Draw ground across the world
         ground_x = 0 - camera.x
