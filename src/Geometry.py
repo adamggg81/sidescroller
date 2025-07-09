@@ -50,25 +50,33 @@ def line_circle_intersection(line_type, circle_list, min_x=0, min_y=0, max_x=0, 
     # x = +/-sqrt(r^2 - (y-yc)^2) + xc
 
     if line_type == 'horizontal':
-        factor = math.sqrt(circle_radius*circle_radius - math.pow(y-circle_y_center, 2))
-        xi_1 = circle_y_center + factor
-        xi_2 = circle_y_center - factor
-        if min_x <= xi_1 <= max_x:
-            return True, xi_1, xi_2
-        elif min_x <= xi_2 <= max_x:
-            return True, xi_1, xi_2
-        else:
+        fac1 = circle_radius*circle_radius - math.pow(y-circle_y_center, 2)
+        if fac1 < 0:
             return False
+        else:
+            factor = math.sqrt(fac1)
+            xi_1 = circle_y_center + factor
+            xi_2 = circle_y_center - factor
+            if min_x <= xi_1 <= max_x:
+                return True, xi_1, xi_2
+            elif min_x <= xi_2 <= max_x:
+                return True, xi_1, xi_2
+            else:
+                return False
     elif line_type == 'vertical':
-        factor = math.sqrt(circle_radius * circle_radius - math.pow(x - circle_x_center, 2))
-        yi_1 = circle_x_center + factor
-        yi_2 = circle_x_center - factor
-        if min_y <= yi_1 <= max_y:
-            return True
-        elif min_y <= yi_2 <= max_y:
-            return True
-        else:
+        fac1 = circle_radius * circle_radius - math.pow(x - circle_x_center, 2)
+        if fac1 < 0:
             return False
+        else:
+            factor = math.sqrt(circle_radius * circle_radius - math.pow(x - circle_x_center, 2))
+            yi_1 = circle_x_center + factor
+            yi_2 = circle_x_center - factor
+            if min_y <= yi_1 <= max_y:
+                return True
+            elif min_y <= yi_2 <= max_y:
+                return True
+            else:
+                return False
     else:
         pass
 
