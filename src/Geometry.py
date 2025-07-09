@@ -23,6 +23,37 @@ def rectangle_rectangle_intersection(rect1_list, rect2_list):
     return result
 
 
+def point_in_polygon(x0, y0, polygon):
+    # Use ray-casting algorithm to determine if point is inside polygon
+    # If there is an odd number of intersections, the point is inside
+    polygon_len = len(polygon.X) - 1
+    counter = 0
+    for k in range(polygon_len):
+        x1 = polygon.X[k]
+        x2 = polygon.X[k + 1]
+        y1 = polygon.Y[k]
+        y2 = polygon.Y[k + 1]
+        if y0 > min(y1, y2):
+            if y0 <= max(y1, y2):
+                if x0 <= max(x1, x2):
+                    # To reach here, the point must be in between y1 and y2 and less than x2
+                    # As long as y1 doesn't equal y2, a horizontal line can be drawn to the right of the point and
+                    # intersect this line segment of the polygon
+                    if y1 != y2:
+                        # inv_segment_slope is 1/slope of the polygon segment
+                        inv_segment_slope = (x2 - x1) / (y2 - y1)
+                        # the ray-cast has equation y = y0
+                        # setting y = y0 = m*x_intersection+b of the polygon segment reduces to this intersection:
+                        x_intersection = (y0-y1) * inv_segment_slope + x1
+                        if x1 == x2 or x0 <= x_intersection:
+                            counter = counter+1
+
+    if counter % 2 == 0:
+        return 0
+    else:
+        return 1
+
+
 def character_collision(victim, aggressor):
     result = False
     victim_rect = [victim.x, victim.y, victim.width, victim.height]
