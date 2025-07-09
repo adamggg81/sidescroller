@@ -13,13 +13,9 @@ def rectangle_rectangle_intersection(rect1_list, rect2_list):
     rect2_y2 = rect2_list[1] + rect2_list[3]
     in_x = False
     in_y = False
-    if rect2_x1 <= rect1_x1 <= rect2_x2:
+    if rect1_x1 < rect2_x2 and rect2_x1 < rect1_x2:
         in_x = True
-    if rect2_x1 <= rect1_x2 <= rect2_x2:
-        in_x = True
-    if rect2_y1 <= rect1_y1 <= rect2_y2:
-        in_y = True
-    if rect2_y1 <= rect1_y2 <= rect2_y2:
+    if rect1_y1 < rect2_y2 and rect2_y1 < rect1_y2:
         in_y = True
     if in_x and in_y:
         result = True
