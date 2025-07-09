@@ -188,9 +188,6 @@ def main():
         pos_text = font.render(f"Player X: {int(player.x)}, Camera X: {int(camera.x)}, Player Y: {int(player.y)},"
                                f"Camera Y: {int(camera.y)}", True, (0, 0, 0))
         screen.blit(pos_text, (10, 50))
-
-        # pos_text = font.render(f"Enemy2 on screen: {int(enemy_list[1].on_screen(camera))}", True, (0, 0, 0))
-        # screen.blit(pos_text, (10, 100))
         
         pygame.display.flip()
         clock.tick(GLOBAL.FPS)
