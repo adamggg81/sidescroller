@@ -1,7 +1,9 @@
 import pygame
+import math
 import globals as GLOBAL
 import Geometry as Geometry
 from WorldObjects import WorldObjects
+from Platform import Platform
 
 
 class Character:
@@ -70,7 +72,7 @@ class Character:
             if self.floor_kills:
                 is_killed = True
 
-        [is_on_platform, target_platform, wall_collision] = Geometry.platform_collision(self, world_objects.platforms)
+        [is_on_platform, target_platform, wall_collision] = self.platform_collision(world_objects.platforms)
         if is_on_platform:
             self.y = target_platform.y - self.height
             self.on_ground = True
@@ -155,3 +157,51 @@ class Character:
 
     def circle_list(self):
         return [self.x, self.y, self.radius]
+
+    def platform_collision(self, platforms):
+        result = False
+        collision_platform = None
+        wall_collision = 0
+        past_player_bottom = self.y - self.vel_y + self.height
+        current_player_bottom = self.y + self.height
+        for platform in platforms:
+            if not isinstance(platform, Platform):
+                raise ValueError("platform must be a Platform")
+            if Geometry.rectangle_rectangle_intersection(self.rect_list(), platform.rect_list()):
+                # Landing on top of platform
+                if self.vel_y > 0 and self.y < platform.y and past_player_bottom <= platform.y + 5:
+                    result = True
+                    collision_platform = platform
+                    return result, collision_platform, wall_collision
+                elif self.x + self.width - self.vel_x <= platform.x:
+                    wall_collision = -1
+                    collision_platform = platform
+                    return result, collision_platform, wall_collision
+                elif self.x - self.vel_x >= platform.x + platform.width:
+                    wall_collision = 1
+                    collision_platform = platform
+                    return result, collision_platform, wall_collision
+
+        # special check for high velocity moving through the platform
+        for platform in platforms:
+            if abs(self.vel_y) > platform.height:
+                platform_top = platform.y
+                platform_bottom = platform.y + platform.height
+
+                if past_player_bottom < platform_top and current_player_bottom > platform_bottom:
+
+                    num_steps = math.ceil(abs(self.vel_y) / platform.height)
+                    x_step = self.vel_x / num_steps
+                    y_step = self.vel_y / num_steps
+                    for j in range(num_steps - 1):
+                        this_x = self.x - self.vel_x + x_step * (j + 1)
+                        this_y = self.y - self.vel_y + y_step * (j + 1)
+                        past_player_rect = [this_x, this_y, self.width, self.height]
+                        if Geometry.rectangle_rectangle_intersection(past_player_rect, platform.rect_list()):
+                            # Landing on top of platform
+                            if self.vel_y > 0 and self.y < platform.y:
+                                result = True
+                                collision_platform = platform
+                                return result, collision_platform, wall_collision
+
+        return result, collision_platform, wall_collision
