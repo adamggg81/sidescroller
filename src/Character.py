@@ -72,13 +72,13 @@ class Character:
 
         [is_on_platform, target_platform, wall_collision] = Geometry.platform_collision(self, world_objects.platforms)
         if is_on_platform:
-            self.y = target_platform.rect.y - self.height
+            self.y = target_platform.y - self.height
             self.on_ground = True
             self.current_platform = target_platform
         elif wall_collision == -1:
-            self.x = target_platform.rect.x - self.width
+            self.x = target_platform.x - self.width
         elif wall_collision == 1:
-            self.x = target_platform.rect.x + target_platform.rect.width
+            self.x = target_platform.x + target_platform.width
         if abs(wall_collision) == 1:
             if self.bounce_off_walls:
                 self.vel_x = -1*self.vel_x

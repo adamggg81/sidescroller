@@ -60,8 +60,8 @@ class Mouse(Enemy):
         self.vel_x = self.current_direction * self.speed
         if self.on_ground and self.current_platform is not None and self.platform_bonding_timer >= self.platform_bonding_threshold:
             platform = self.current_platform
-            platform_min = platform.rect.x
-            platform_max = platform_min + platform.rect.width
+            platform_min = platform.x
+            platform_max = platform_min + platform.width
             if self.vel_x > 0 and self.x + self.width > platform_max:
                 self.vel_x = -1*self.speed
                 self.x = platform_max - self.width

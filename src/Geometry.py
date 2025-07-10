@@ -158,32 +158,32 @@ def platform_collision(walker, platforms):
     current_player_bottom = walker.y + walker.height
     # if not walker.on_ground:
     for platform in platforms:
-        platform_rect = [platform.rect.x, platform.rect.y, platform.rect.width, platform.rect.height]
+        platform_rect = [platform.x, platform.y, platform.width, platform.height]
         if rectangle_rectangle_intersection(player_rect, platform_rect):
             # Landing on top of platform
-            if walker.vel_y > 0 and walker.y < platform.rect.y and past_player_bottom <= platform.rect.y+5:
+            if walker.vel_y > 0 and walker.y < platform.y and past_player_bottom <= platform.y+5:
                 result = True
                 collision_platform = platform
                 return result, collision_platform, wall_collision
-            elif walker.x + walker.width - walker.vel_x <= platform.rect.x:
+            elif walker.x + walker.width - walker.vel_x <= platform.x:
                 wall_collision = -1
                 collision_platform = platform
                 return result, collision_platform, wall_collision
-            elif walker.x - walker.vel_x >= platform.rect.x + platform.rect.width:
+            elif walker.x - walker.vel_x >= platform.x + platform.width:
                 wall_collision = 1
                 collision_platform = platform
                 return result, collision_platform, wall_collision
 
     # special check for high velocity moving through the platform
     for platform in platforms:
-        if abs(walker.vel_y) > platform.rect.height:
-            platform_rect = [platform.rect.x, platform.rect.y, platform.rect.width, platform.rect.height]
-            platform_top = platform.rect.y
-            platform_bottom = platform.rect.y + platform.rect.height
+        if abs(walker.vel_y) > platform.height:
+            platform_rect = [platform.x, platform.y, platform.width, platform.height]
+            platform_top = platform.y
+            platform_bottom = platform.y + platform.height
 
             if past_player_bottom < platform_top and current_player_bottom > platform_bottom:
 
-                num_steps = math.ceil(abs(walker.vel_y) / platform.rect.height)
+                num_steps = math.ceil(abs(walker.vel_y) / platform.height)
                 x_step = walker.vel_x / num_steps
                 y_step = walker.vel_y / num_steps
                 for j in range(num_steps - 1):
@@ -192,7 +192,7 @@ def platform_collision(walker, platforms):
                     past_player_rect = [this_x, this_y, walker.width, walker.height]
                     if rectangle_rectangle_intersection(past_player_rect, platform_rect):
                         # Landing on top of platform
-                        if walker.vel_y > 0 and walker.y < platform.rect.y:
+                        if walker.vel_y > 0 and walker.y < platform.y:
                             result = True
                             collision_platform = platform
                             return result, collision_platform, wall_collision
