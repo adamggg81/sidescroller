@@ -11,6 +11,9 @@ class Platform:
         self.grass_image = pygame.image.load("grass_platform.png").convert_alpha()
         self.dirt_image = pygame.image.load("dirt_platform.png").convert_alpha()
 
+    def rect_list(self):
+        return [self.x, self.y, self.width, self.height]
+
     def draw(self, screen, camera):
         screen_x = self.x - camera.x
         screen_y = self.y - camera.y

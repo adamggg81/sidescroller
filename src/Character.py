@@ -117,24 +117,16 @@ class Character:
         if not isinstance(aggressor, Character):
             raise ValueError("Aggressor must also be a Character type")
         if self.shape == 'rectangle' and aggressor.shape == 'rectangle':
-            victim_rect = [self.x, self.y, self.width, self.height]
-            aggressor_rect = [aggressor.x, aggressor.y, aggressor.width, aggressor.height]
-            if Geometry.rectangle_rectangle_intersection(victim_rect, aggressor_rect):
+            if Geometry.rectangle_rectangle_intersection(self.rect_list(), aggressor.rect_list()):
                 result = True
         elif self.shape == 'rectangle' and aggressor.shape == 'circle':
-            victim_rect = [self.x, self.y, self.width, self.height]
-            aggressor_circle = [aggressor.x, aggressor.y, aggressor.radius]
-            if Geometry.rectangle_circle_intersection(victim_rect, aggressor_circle):
+            if Geometry.rectangle_circle_intersection(self.rect_list(), aggressor.circle_list()):
                 result = True
         elif self.shape == 'circle' and aggressor.shape == 'rectangle':
-            victim_circle = [self.x, self.y, self.radius]
-            aggressor_rect = [aggressor.x, aggressor.y, aggressor.width, aggressor.height]
-            if Geometry.rectangle_circle_intersection(aggressor_rect, victim_circle):
+            if Geometry.rectangle_circle_intersection(aggressor.rect_list(), self.circle_list()):
                 result = True
         elif self.shape == 'circle' and aggressor.shape == 'circle':
-            victim_circle = [self.x, self.y, self.radius]
-            aggressor_circle = [aggressor.x, aggressor.y, aggressor.radius]
-            if Geometry.circle_circle_intersection(victim_circle, aggressor_circle):
+            if Geometry.circle_circle_intersection(self.circle_list(), aggressor.circle_list()):
                 result = True
 
         return result
@@ -157,3 +149,9 @@ class Character:
             result = True
 
         return result
+
+    def rect_list(self):
+        return [self.x, self.y, self.width, self.height]
+
+    def circle_list(self):
+        return [self.x, self.y, self.radius]
