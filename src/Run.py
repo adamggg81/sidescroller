@@ -2,6 +2,7 @@ import pygame
 import sys
 import math
 from Player import Player
+from Platform import Platform
 from Frog import Frog
 from Mouse import Mouse
 from Cardinal import Cardinal
@@ -32,28 +33,6 @@ class Camera:
         # # You can add vertical camera movement here if needed
         # # For now, keep camera at ground level
         # self.y = 0
-
-
-class Platform:
-    def __init__(self, x, y, width, height):
-        self.rect = pygame.Rect(x, y, width, height)
-        self.grass_image = pygame.image.load("grass_platform.png").convert_alpha()
-        self.dirt_image = pygame.image.load("dirt_platform.png").convert_alpha()
-    
-    def draw(self, screen, camera):
-        screen_x = self.rect.x - camera.x
-        screen_y = self.rect.y - camera.y
-        # pygame.draw.rect(screen, GLOBAL.GREEN, (screen_x, screen_y, self.rect.width, self.rect.height))
-
-        platform_surface = pygame.Surface((self.rect.width, self.rect.height), pygame.SRCALPHA)
-
-        for y_offset in range(0, self.rect.height+1, 20):
-            for x_offset in range(0, self.rect.width+1, 20):
-                if y_offset == 0:
-                    platform_surface.blit(self.grass_image, (x_offset, 0))
-                else:
-                    platform_surface.blit(self.dirt_image, (x_offset, y_offset))
-        screen.blit(platform_surface, (screen_x, screen_y))
 
 
 def main():
@@ -90,11 +69,11 @@ def main():
     # create frog
     enemy_list = []
     enemy_list.append(Frog(600, floor-300))
-    enemy_list.append(Frog(800, floor-250-40))
-    enemy_list.append(Frog(2100, floor - 250 - 40))
-    enemy_list.append(Mouse(600, 800))
-    enemy_list.append(Frog(1250, 750))
-    enemy_list.append(Cardinal(1200, 200))
+    # enemy_list.append(Frog(800, floor-250-40))
+    # enemy_list.append(Frog(2100, floor - 250 - 40))
+    # enemy_list.append(Mouse(600, 800))
+    # enemy_list.append(Frog(1250, 750))
+    # enemy_list.append(Cardinal(1200, 200))
     enemy_list.append(Hairball(800, floor-300))
     enemy_list.append(Hairball(900, floor - 400))
     enemy_list.append(Hairball(1000, floor - 500))
