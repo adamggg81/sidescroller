@@ -117,20 +117,18 @@ class Character:
         result = False
         if not isinstance(aggressor, Character):
             raise ValueError("Aggressor must also be a Character type")
-        if Geometry.rectangle_rectangle_intersection(self.rect_list(), aggressor.rect_list()):
-            result = True
-        # if self.shape == 'rectangle' and aggressor.shape == 'rectangle':
-        #     if Geometry.rectangle_rectangle_intersection(self.rect_list(), aggressor.rect_list()):
-        #         result = True
-        # elif self.shape == 'rectangle' and aggressor.shape == 'circle':
-        #     if Geometry.rectangle_circle_intersection(self.rect_list(), aggressor.circle_list()):
-        #         result = True
-        # elif self.shape == 'circle' and aggressor.shape == 'rectangle':
-        #     if Geometry.rectangle_circle_intersection(aggressor.rect_list(), self.circle_list()):
-        #         result = True
-        # elif self.shape == 'circle' and aggressor.shape == 'circle':
-        #     if Geometry.circle_circle_intersection(self.circle_list(), aggressor.circle_list()):
-        #         result = True
+        if self.shape == 'rectangle' and aggressor.shape == 'rectangle':
+            if Geometry.rectangle_rectangle_intersection(self.rect_list(), aggressor.rect_list()):
+                result = True
+        elif self.shape == 'rectangle' and aggressor.shape == 'circle':
+            if Geometry.rectangle_circle_intersection(self.rect_list(), aggressor.circle_list()):
+                result = True
+        elif self.shape == 'circle' and aggressor.shape == 'rectangle':
+            if Geometry.rectangle_circle_intersection(aggressor.rect_list(), self.circle_list()):
+                result = True
+        elif self.shape == 'circle' and aggressor.shape == 'circle':
+            if Geometry.circle_circle_intersection(self.circle_list(), aggressor.circle_list()):
+                result = True
 
         return result
 

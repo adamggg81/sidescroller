@@ -42,9 +42,10 @@ def circle_circle_intersection(circle1_list, circle2_list):
 
 
 def line_circle_intersection(line_type, circle_list, min_x=0, min_y=0, max_x=0, max_y=0, x=0, y=0):
-    circle_x_center = circle_list[0]
-    circle_y_center = circle_list[1]
     circle_radius = circle_list[2]
+    circle_x_center = circle_list[0] + circle_radius
+    circle_y_center = circle_list[1] +circle_radius
+
     # r^2 = (x-xc)^2 + (y-yc)^2
     # y = +/-sqrt(r^2 - (x-xc)^2) + yc
     # x = +/-sqrt(r^2 - (y-yc)^2) + xc
@@ -89,9 +90,10 @@ def rectangle_circle_intersection(rect_list, circle_list):
     rectangle_polygon_x = [rect_x_min, rect_x_max, rect_x_max, rect_x_min, rect_x_min]
     rectangle_polygon_y = [rect_y_min, rect_y_min, rect_y_max, rect_y_max, rect_y_min]
 
-    circle_x_center = circle_list[0]
-    circle_y_center = circle_list[1]
     circle_radius = circle_list[2]
+    circle_x_center = circle_list[0] + circle_radius
+    circle_y_center = circle_list[1] + circle_radius
+
 
     # check center + radius being beyond min/max limits
     if circle_x_center + circle_radius < rect_x_min:
