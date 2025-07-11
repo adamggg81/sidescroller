@@ -38,9 +38,7 @@ class Character:
         self.image = None
         self.rect = None
 
-    def update(self, world_objects: WorldObjects):
-        original_ground_status = self.on_ground
-        original_y = self.y
+    def position_update(self):
         # Apply gravity
         if self.obey_gravity:
             self.vel_y += self.gravity
@@ -48,6 +46,8 @@ class Character:
         # Update position
         self.x += self.vel_x
         self.y += self.vel_y
+
+    def update(self, world_objects: WorldObjects):
 
         self.on_ground = False
 
@@ -92,8 +92,6 @@ class Character:
         # also if gravity tries to push through the ground, reset y position
         if self.on_ground:
             self.vel_y = 0
-        if original_ground_status and self.on_ground:
-            self.y = original_y
 
         # Keep player within world boundaries
         if self.x < 0:
@@ -119,18 +117,20 @@ class Character:
         result = False
         if not isinstance(aggressor, Character):
             raise ValueError("Aggressor must also be a Character type")
-        if self.shape == 'rectangle' and aggressor.shape == 'rectangle':
-            if Geometry.rectangle_rectangle_intersection(self.rect_list(), aggressor.rect_list()):
-                result = True
-        elif self.shape == 'rectangle' and aggressor.shape == 'circle':
-            if Geometry.rectangle_circle_intersection(self.rect_list(), aggressor.circle_list()):
-                result = True
-        elif self.shape == 'circle' and aggressor.shape == 'rectangle':
-            if Geometry.rectangle_circle_intersection(aggressor.rect_list(), self.circle_list()):
-                result = True
-        elif self.shape == 'circle' and aggressor.shape == 'circle':
-            if Geometry.circle_circle_intersection(self.circle_list(), aggressor.circle_list()):
-                result = True
+        if Geometry.rectangle_rectangle_intersection(self.rect_list(), aggressor.rect_list()):
+            result = True
+        # if self.shape == 'rectangle' and aggressor.shape == 'rectangle':
+        #     if Geometry.rectangle_rectangle_intersection(self.rect_list(), aggressor.rect_list()):
+        #         result = True
+        # elif self.shape == 'rectangle' and aggressor.shape == 'circle':
+        #     if Geometry.rectangle_circle_intersection(self.rect_list(), aggressor.circle_list()):
+        #         result = True
+        # elif self.shape == 'circle' and aggressor.shape == 'rectangle':
+        #     if Geometry.rectangle_circle_intersection(aggressor.rect_list(), self.circle_list()):
+        #         result = True
+        # elif self.shape == 'circle' and aggressor.shape == 'circle':
+        #     if Geometry.circle_circle_intersection(self.circle_list(), aggressor.circle_list()):
+        #         result = True
 
         return result
 

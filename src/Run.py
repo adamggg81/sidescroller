@@ -49,6 +49,8 @@ def main():
     # Create platforms spread across the wider world
     floor = GLOBAL.WORLD_HEIGHT
     platforms = [
+        # Platform(200, floor - 800, 100, 800),
+        # Platform(600, floor - 800, 100, 800),
         Platform(200, floor-150, 150, 20),
         Platform(400, floor-250, 150, 80),
         Platform(600, floor-330, 150, 40),
@@ -68,12 +70,13 @@ def main():
 
     # create frog
     enemy_list = []
-    enemy_list.append(Frog(600, floor-300))
-    # enemy_list.append(Frog(800, floor-250-40))
-    # enemy_list.append(Frog(2100, floor - 250 - 40))
-    # enemy_list.append(Mouse(600, 800))
-    # enemy_list.append(Frog(1250, 750))
-    # enemy_list.append(Cardinal(1200, 200))
+    # enemy_list.append(Frog(400, floor-100))
+    # enemy_list.append(Hairball(500, floor - 100))
+    enemy_list.append(Frog(800, floor-250-40))
+    enemy_list.append(Frog(2100, floor - 250 - 40))
+    enemy_list.append(Mouse(600, 800))
+    enemy_list.append(Frog(1250, 750))
+    enemy_list.append(Cardinal(1200, 200))
     enemy_list.append(Hairball(800, floor-300))
     enemy_list.append(Hairball(900, floor - 400))
     enemy_list.append(Hairball(1000, floor - 500))
@@ -123,7 +126,12 @@ def main():
             player.god_mode = True
         if keys[pygame.K_h]:
             player.god_mode = False
-        
+
+        # Update x, y, vel_y for each moving object
+        player.position_update()
+        for enemy in enemy_list:
+            enemy.position_update()
+
         # Update player
         player.update(world_objects)
         
