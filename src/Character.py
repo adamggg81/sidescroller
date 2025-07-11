@@ -62,9 +62,9 @@ class Character:
             self.stun_timer = self.stun_threshold
 
         # Ground collision (simple floor at bottom of screen)
-        if self.y + self.height >= GLOBAL.WORLD_HEIGHT - GLOBAL.GROUND_HEIGHT:
-            self.y = GLOBAL.WORLD_HEIGHT - GLOBAL.GROUND_HEIGHT - self.height
-            # self.vel_y = 0
+        top_ground = GLOBAL.WORLD_HEIGHT - GLOBAL.GROUND_HEIGHT
+        if self.y + self.height >= top_ground:
+            self.y = top_ground - self.height
             self.on_ground = True
             self.current_platform = None
 
@@ -105,6 +105,7 @@ class Character:
             self.vel_x = -1*self.vel_x
             self.current_direction = -1
 
+        # Check hitting the "Ceiling"
         if self.y < 0:
             self.y = 0
             self.vel_y = 0
