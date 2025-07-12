@@ -9,6 +9,15 @@ class WorldObjects:
         self.Enemy = None
         self.fps = 0
 
+    def delete_dead_enemies(self):
+        dead_index = []
+        for j in range(len(self.Enemy)):
+            enemy = self.Enemy[j]
+            if not enemy.alive:
+                dead_index.append(j)
+        for j in range(len(dead_index) - 1, -1, -1):
+            del self.Enemy[dead_index[j]]
+
     def new_level(self):
         for j in range(len(self.platforms)-1, -1, -1):
             del self.platforms[j]

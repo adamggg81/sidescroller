@@ -50,14 +50,14 @@ def main():
     floor = GLOBAL.WORLD_HEIGHT
     platforms = [
         # Platform(200, floor - 800, 100, 800),
-        # Platform(600, floor - 800, 100, 800),
+        # Platform(700, floor - 600, 100, 800),
         Platform(200, floor-150, 150, 20),
         Platform(400, floor-250, 150, 80),
         Platform(600, floor-330, 150, 40),
         Platform(400, floor-450, 150, 20),
         Platform(800, floor-200, 150, 20),
         Platform(1000, floor-300, 150, 20),
-        Platform(1200, floor-400, 150, 20),
+        Platform(1200, floor-400, 150, 250),
         Platform(1400, floor-150, 150, 20),
         Platform(1600, floor-250, 150, 20),
         Platform(1800, floor-350, 150, 20),
@@ -95,6 +95,9 @@ def main():
 
     background_image = pygame.image.load("forest_background.png")
 
+    # Test loading level
+    world_objects.load_level('levels\\sandbox1.txt')
+
     running = True
     while running:
         # Handle events
@@ -129,7 +132,7 @@ def main():
 
         # Update x, y, vel_y for each moving object
         player.position_update()
-        for enemy in enemy_list:
+        for enemy in world_objects.Enemy:
             enemy.position_update()
 
         # Update player
@@ -138,8 +141,11 @@ def main():
         # Update camera to follow player
         camera.update(player)
 
-        for enemy in enemy_list:
+        for enemy in world_objects.Enemy:
             enemy.update(world_objects)
+
+        # Remove dead enemies
+        world_objects.delete_dead_enemies()
         
         # Draw everything
         screen.fill(GLOBAL.WHITE)
@@ -162,10 +168,10 @@ def main():
             print('can you get here')
         
         # Draw platforms
-        for platform in platforms:
+        for platform in world_objects.platforms:
             platform.draw(screen, camera)
 
-        for enemy in enemy_list:
+        for enemy in world_objects.Enemy:
             enemy.draw(screen, camera)
         
         # Draw player
