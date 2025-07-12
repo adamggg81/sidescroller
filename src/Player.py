@@ -57,13 +57,15 @@ class Player(Character):
         self.alive = False
         self.respawn_timer = 0
 
-    def respawn(self):
+    def respawn(self, world_objects: WorldObjects):
         self.x = self.initial_x
         self.y = self.initial_y
         self.vel_x = 0
         self.vel_y = 0
         self.alive = True
         self.invincible_timer = 0
+        # reload the current level on respawn
+        world_objects.load_level(world_objects.current_level)
 
     def personal_update(self, world_objects: WorldObjects):
 
@@ -73,7 +75,7 @@ class Player(Character):
 
         if not self.alive:
             if self.respawn_timer == self.respawn_threshold:
-                self.respawn()
+                self.respawn(world_objects)
             return
 
         bounce_up = False

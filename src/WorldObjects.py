@@ -8,6 +8,7 @@ class WorldObjects:
         self.platforms = None
         self.Enemy = None
         self.fps = 0
+        self.current_level = ''
 
     def delete_dead_enemies(self):
         dead_index = []
@@ -37,7 +38,12 @@ class WorldObjects:
         self.platforms = []
         self.Enemy = []
 
+        # track the current level for reload
+        # perhaps better to keep the list data to avoid unnecessary file re-read, but fine for now
+        self.current_level = filename
+
         # Append to this dictionary whenever a new enemy is added
+        # This allows an effective string-to-function conversion on enemy type
         enemy_types = {
             "Frog": Frog,
             "Mouse": Mouse,
