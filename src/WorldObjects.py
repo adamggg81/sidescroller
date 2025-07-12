@@ -37,6 +37,14 @@ class WorldObjects:
         self.platforms = []
         self.Enemy = []
 
+        # Append to this dictionary whenever a new enemy is added
+        enemy_types = {
+            "Frog": Frog,
+            "Mouse": Mouse,
+            "Cardinal": Cardinal,
+            "Hairball": Hairball
+        }
+
         with open(filename) as file:
             line_list = [line.rstrip() for line in file]
 
@@ -63,13 +71,8 @@ class WorldObjects:
                 height = int(arg_container["height"])
                 target = Platform(x, y, width, height)
                 self.platforms.append(target)
-            elif input_type == 'Mouse':
-                target = Mouse(x, y)
-                self.Enemy.append(target)
-            elif input_type == 'Frog':
-                target = Frog(x, y)
-                self.Enemy.append(target)
-            elif input_type == 'Cardinal':
-                target = Cardinal(x, y)
+            elif input_type == 'Enemy':
+                this_enemy = arg_container["type"]
+                target = enemy_types[this_enemy](x, y)
                 self.Enemy.append(target)
 
