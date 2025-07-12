@@ -19,6 +19,9 @@ class Enemy(Character):
         self.platform_bonding_threshold = 0
         self.platform_bonding_timer = 0
 
+    def die(self):
+        self.alive = False
+
     def personal_update(self, world_objects: WorldObjects):
 
         # whenever the change direction timer crosses the threshold, frog is allowed to change direction
@@ -38,7 +41,56 @@ class Enemy(Character):
         # 1:  Enemy to Enemy collision
         for enemy in world_objects.Enemy:
             if enemy != self:
+                did_collide = False
                 if self.character_collision(enemy):
+                    did_collide = True
+                if not did_collide:
+                    if self.shape == 'rectangle':
+                        self_center_x = self.x + self.width/2
+                        self_center_y = self.y + self.height/2
+                        self_reach = max(self.width, self.height)/2
+                    elif self.shape == 'circle':
+                        self_center_x = self.x + self.radius
+                        self_center_y = self.y + self.radius
+                        self_reach = self.radius
+                    if enemy.shape == 'rectangle':
+                        enemy_center_x = enemy.x + enemy.width/2
+                        enemy_center_y = enemy.y + enemy.height/2
+                        enemy_reach = max(enemy.width, enemy.height) / 2
+                    elif enemy.shape == 'circle':
+                        enemy_center_x = enemy.x + enemy.radius
+                        enemy_center_y = enemy.y + enemy.radius
+                        enemy_reach = enemy.radius
+                    enemy_distance = math.sqrt(math.pow(self_center_x - enemy_center_x, 2) + math.pow(self_center_y - enemy_center_y, 2))
+                    if enemy_distance <= self_reach + enemy_reach + abs(self.vel_x) + abs(self.vel_y) + abs(enemy.vel_x) + abs(enemy.vel_y):
+                        # move them back in time until a collision occurs
+                        # if distance increases, quit
+                        num_steps = 20
+                        self_x = self.x
+                        self_y = self.y
+                        enemy_x = enemy.x
+                        enemy_y = enemy.y
+                        self.x = self.x - self.vel_x
+                        self.y = self.y - self.vel_y
+                        enemy.x = enemy.x - enemy.vel_x
+                        enemy.y = enemy.y - enemy.vel_y
+                        for j in range(num_steps):
+                            self.x = self.x + self.vel_x/num_steps
+                            self.y = self.y + self.vel_y / num_steps
+                            enemy.x = enemy.x + enemy.vel_x / num_steps
+                            enemy.y = enemy.y + enemy.vel_y / num_steps
+                            if self.character_collision(enemy):
+                                did_collide = True
+                                break
+                        self.x = self_x
+                        self.y = self_y
+                        enemy.x = enemy_x
+                        enemy.y = enemy_y
+
+
+
+                if did_collide:
+                #if self.character_collision(enemy):
                     direction_change = False
                     if self.y + self.height - self.vel_y <= enemy.y - enemy.vel_y:
                         # self jumps on top of enemy
