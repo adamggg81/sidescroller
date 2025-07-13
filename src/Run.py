@@ -37,46 +37,10 @@ def main():
     clock = pygame.time.Clock()
     
     # Create player
-    player = Player(200, 400)
+    player = Player(0, 0)
     
     # Create camera
     camera = Camera()
-    
-    # Create platforms spread across the wider world
-    floor = 1200
-    platforms = [
-        # Platform(200, floor - 800, 100, 800),
-        # Platform(700, floor - 600, 100, 800),
-        Platform(200, floor-150, 150, 20),
-        Platform(400, floor-250, 150, 80),
-        Platform(600, floor-330, 150, 40),
-        Platform(400, floor-450, 150, 20),
-        Platform(800, floor-200, 150, 20),
-        Platform(1000, floor-300, 150, 20),
-        Platform(1200, floor-400, 150, 250),
-        Platform(1400, floor-150, 150, 20),
-        Platform(1600, floor-250, 150, 20),
-        Platform(1800, floor-350, 150, 20),
-        Platform(2000, floor-200, 150, 20),
-        Platform(2200, floor-300, 150, 20),
-        Platform(250, floor - 550, 150, 20),
-        Platform(400, floor - 650, 150, 20),
-        Platform(750, floor - 550, 150, 20),
-    ]
-
-    # create frog
-    enemy_list = []
-    # enemy_list.append(Frog(400, floor-100))
-    # enemy_list.append(Hairball(500, floor - 100))
-    enemy_list.append(Frog(800, floor-250-40))
-    enemy_list.append(Frog(2100, floor - 250 - 40))
-    enemy_list.append(Mouse(600, 800))
-    enemy_list.append(Frog(1250, 750))
-    enemy_list.append(Cardinal(1200, 200))
-    enemy_list.append(Hairball(800, floor-300))
-    enemy_list.append(Hairball(900, floor - 400))
-    enemy_list.append(Hairball(1000, floor - 500))
-    enemy_list.append(Hairball(1100, floor - 600))
 
     jump_keys = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
 
@@ -85,8 +49,6 @@ def main():
     world_objects = WorldObjects()
     world_objects.Player = player
     world_objects.camera = camera
-    world_objects.platforms = platforms
-    world_objects.Enemy = enemy_list
     world_objects.fps = actual_fps
 
     background_image = pygame.image.load("forest_background.png")

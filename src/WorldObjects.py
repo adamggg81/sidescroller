@@ -5,8 +5,8 @@ class WorldObjects:
     def __init__(self):
         self.Player = None
         self.camera = None
-        self.platforms = None
-        self.Enemy = None
+        self.platforms = []
+        self.Enemy = []
         self.fps = 0
         self.current_level = ''
         self.width = 0
