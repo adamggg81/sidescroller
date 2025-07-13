@@ -9,9 +9,15 @@ from Cardinal import Cardinal
 from Hairball import Hairball
 import globals as GLOBAL
 from WorldObjects import WorldObjects
+import tkinter as tkinter
+from tkinter import filedialog
 
 # Initialize Pygame
 pygame.init()
+
+# Create a hidden Tkinter root window
+root = tkinter.Tk()
+root.withdraw()
 
 
 class Camera:
@@ -65,6 +71,15 @@ def main():
             elif event.type == pygame.KEYUP:
                 if event.key in jump_keys:
                     player.stop_jump()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_o:
+                    file_path = filedialog.askopenfilename(
+                        title="Load Level",
+                        filetypes=[("Levels", "*.txt"), ("All files", "*.*")],
+                        initialdir='.\\levels\\'
+                    )
+                    if file_path:
+                        world_objects.load_level(file_path)
 
         # Handle continuous key presses
         keys = pygame.key.get_pressed()
@@ -121,7 +136,7 @@ def main():
         ground_width = world_objects.width
         ground_y = world_objects.height - GLOBAL.GROUND_HEIGHT - camera.y
         if ground_x + ground_width > 0 and ground_x < GLOBAL.SCREEN_WIDTH:
-            pygame.draw.rect(screen, GLOBAL.RED, (ground_x, ground_y, ground_width, GLOBAL.GROUND_HEIGHT))
+            pygame.draw.rect(screen, GLOBAL.BLUE, (ground_x, ground_y, ground_width, GLOBAL.GROUND_HEIGHT))
         else:
             print('can you get here')
         
