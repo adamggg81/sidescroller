@@ -22,6 +22,7 @@ class Hairball(Enemy):
         self.initialize = True
         self.jump_on_head = False
         self.bounce_off_walls = True
+        self.collision_kills = True
 
         image_list = ["orange_hairball.png"]
         for j in range(len(image_list)):
