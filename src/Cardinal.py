@@ -16,6 +16,7 @@ class Cardinal(Enemy):
         self.width = 80
         self.height = 40
         self.speed = 8
+        self.falling_speed_mult = 2
         self.jump_power = -5
         self.jumping = False
         self.floor_kills = False
@@ -80,6 +81,9 @@ class Cardinal(Enemy):
             self.vel_y = 0
             self.player_bonded = True
             self.lock_position = player.y
+        # Make the cardinal x velocity small while it is falling
+        if not self.player_bonded:
+            self.vel_x = self.vel_x / self.falling_speed_mult
 
         if self.player_bonded:
             self.vel_y = 0
