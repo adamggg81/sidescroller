@@ -9,6 +9,8 @@ class WorldObjects:
         self.Enemy = None
         self.fps = 0
         self.current_level = ''
+        self.width = 0
+        self.height = 0
 
     def delete_dead_enemies(self):
         dead_index = []
@@ -64,17 +66,33 @@ class WorldObjects:
             for element in args:
                 arg_split = element.split('=')
                 arg_container[arg_split[0]] = arg_split[1]
+            all_keys = list(arg_container.keys())
 
-            x = int(arg_container["x"])
-            y = int(arg_container["y"])
+            if "x" in all_keys:
+                x = int(arg_container["x"])
+            else:
+                x = 0
+            if "y" in all_keys:
+                y = int(arg_container["y"])
+            else:
+                y = 0
+            if "width" in all_keys:
+                width = int(arg_container["width"])
+            else:
+                width = 0
+            if "height" in all_keys:
+                height = int(arg_container["height"])
+            else:
+                height = 0
 
-            if input_type == 'Player':
+            if input_type == 'World':
+                self.width = width
+                self.height = height
+            elif input_type == 'Player':
                 target = self.Player
                 target.x = x
                 target.y = y
             elif input_type == 'Platform':
-                width = int(arg_container["width"])
-                height = int(arg_container["height"])
                 target = Platform(x, y, width, height)
                 self.platforms.append(target)
             elif input_type == 'Enemy':

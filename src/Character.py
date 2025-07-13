@@ -63,7 +63,7 @@ class Character:
             self.stun_timer = self.stun_threshold
 
         # Ground collision (simple floor at bottom of screen)
-        top_ground = GLOBAL.WORLD_HEIGHT - GLOBAL.GROUND_HEIGHT
+        top_ground = world_objects.height - GLOBAL.GROUND_HEIGHT
         if self.y + self.height >= top_ground:
             self.y = top_ground - self.height
             self.on_ground = True
@@ -99,8 +99,8 @@ class Character:
             self.x = 0
             self.vel_x = -1 * self.vel_x
             self.current_direction = 1
-        elif self.x + self.width > GLOBAL.WORLD_WIDTH:
-            self.x = GLOBAL.WORLD_WIDTH - self.width
+        elif self.x + self.width > world_objects.width:
+            self.x = world_objects.width - self.width
             self.vel_x = -1*self.vel_x
             self.current_direction = -1
 

@@ -1,8 +1,6 @@
 # Constants
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-WORLD_WIDTH = 2400  # World is 3x wider than screen
-WORLD_HEIGHT = 1200
 GROUND_HEIGHT = 50
 FPS = 60
 

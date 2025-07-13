@@ -79,7 +79,7 @@ class Player(Character):
             return
 
         bounce_up = False
-        top_bounce = GLOBAL.WORLD_HEIGHT
+        top_bounce = world_objects.height
         for enemy in world_objects.Enemy:
             if self.character_collision(enemy):
                 # Test code for making enemy die upon player collision.  Not finished.  Testing for Hairball

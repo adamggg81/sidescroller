@@ -19,20 +19,16 @@ class Camera:
         self.x = 0
         self.y = 0
         
-    def update(self, target):
+    def update(self, target, world_objects: WorldObjects):
         # Follow the target (player) horizontally
         # Keep player roughly in center of screen
         self.x = round(target.x - math.floor(GLOBAL.SCREEN_WIDTH / 2))
         
         # Clamp camera to world boundaries
-        self.x = max(0, min(self.x, GLOBAL.WORLD_WIDTH - GLOBAL.SCREEN_WIDTH))
+        self.x = max(0, min(self.x, world_objects.width - GLOBAL.SCREEN_WIDTH))
 
         self.y = round(target.y - math.floor(GLOBAL.SCREEN_HEIGHT / 2))
-        self.y = max(0, min(self.y, GLOBAL.WORLD_HEIGHT - GLOBAL.SCREEN_HEIGHT))
-        
-        # # You can add vertical camera movement here if needed
-        # # For now, keep camera at ground level
-        # self.y = 0
+        self.y = max(0, min(self.y, world_objects.height - GLOBAL.SCREEN_HEIGHT))
 
 
 def main():
@@ -47,7 +43,7 @@ def main():
     camera = Camera()
     
     # Create platforms spread across the wider world
-    floor = GLOBAL.WORLD_HEIGHT
+    floor = 1200
     platforms = [
         # Platform(200, floor - 800, 100, 800),
         # Platform(700, floor - 600, 100, 800),
@@ -139,7 +135,7 @@ def main():
         player.update(world_objects)
         
         # Update camera to follow player
-        camera.update(player)
+        camera.update(player, world_objects)
 
         for enemy in world_objects.Enemy:
             enemy.update(world_objects)
@@ -160,8 +156,8 @@ def main():
         
         # Draw ground across the world
         ground_x = 0 - camera.x
-        ground_width = GLOBAL.WORLD_WIDTH
-        ground_y = GLOBAL.WORLD_HEIGHT - GLOBAL.GROUND_HEIGHT - camera.y
+        ground_width = world_objects.width
+        ground_y = world_objects.height - GLOBAL.GROUND_HEIGHT - camera.y
         if ground_x + ground_width > 0 and ground_x < GLOBAL.SCREEN_WIDTH:
             pygame.draw.rect(screen, GLOBAL.RED, (ground_x, ground_y, ground_width, GLOBAL.GROUND_HEIGHT))
         else:
