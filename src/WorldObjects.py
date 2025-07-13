@@ -53,6 +53,8 @@ class WorldObjects:
             "Hairball": Hairball
         }
 
+        platform_name_list = []
+
         with open(filename) as file:
             line_list = [line.rstrip() for line in file]
 
@@ -74,6 +76,8 @@ class WorldObjects:
                 x = 0
             if "y" in all_keys:
                 y = int(arg_container["y"])
+                # y is referenced vs. bottom
+                y = self.height - y
             else:
                 y = 0
             if "width" in all_keys:
@@ -84,6 +88,14 @@ class WorldObjects:
                 height = int(arg_container["height"])
             else:
                 height = 0
+            if "name" in all_keys:
+                name = arg_container["name"]
+            else:
+                name = ''
+            if "platform" in all_keys:
+                platform_name = arg_container["platform"]
+            else:
+                platform_name = ''
 
             if input_type == 'World':
                 self.width = width
@@ -95,8 +107,14 @@ class WorldObjects:
             elif input_type == 'Platform':
                 target = Platform(x, y, width, height)
                 self.platforms.append(target)
+                platform_name_list.append(name)
             elif input_type == 'Enemy':
                 this_enemy = arg_container["type"]
                 target = enemy_types[this_enemy](x, y)
+                # allow an enemy to reference a platform, so it starts on top of that platform
+                if len(platform_name) > 0:
+                    indices = [i for i, x in enumerate(platform_name_list) if x == platform_name]
+                    match_index = indices[0]
+                    match_platform = self.platforms[match_index]
+                    target.y = match_platform.y - target.height
                 self.Enemy.append(target)
-
