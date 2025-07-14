@@ -78,6 +78,19 @@ class Player(Character):
                 self.respawn(world_objects)
             return
 
+        # check reaching Goal
+        # Eventually it will have to load a new level, but just "die" for now
+        goal = world_objects.Goal
+        if Geometry.rectangle_rectangle_intersection(self.rect_list(), goal.rect_list()):
+            # force previous frame y position to be above box (jump in box)
+            # collide with sides of box
+            if self.x+self.width-self.vel_x <= goal.x:
+                self.x = goal.x - self.width
+            elif self.x-self.vel_x >= goal.x+goal.width:
+                self.x = goal.x + goal.width
+            elif self.y+self.height >= goal.y+goal.height-goal.y_offset:
+                self.die()
+
         bounce_up = False
         top_bounce = world_objects.height
         for enemy in world_objects.Enemy:

@@ -34,3 +34,6 @@ class Goal:
 
         self.rect.center = (screen_x + self.width / 2, screen_y + self.height / 2 + self.y_offset)
         screen.blit(self.image, self.rect)
+
+    def rect_list(self):
+        return [self.x, self.y, self.width, self.height]
