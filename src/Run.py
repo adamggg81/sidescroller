@@ -7,6 +7,7 @@ from Frog import Frog
 from Mouse import Mouse
 from Cardinal import Cardinal
 from Hairball import Hairball
+from Goal import Goal
 import globals as GLOBAL
 from WorldObjects import WorldObjects
 import tkinter as tkinter
@@ -55,6 +56,7 @@ def main():
     world_objects = WorldObjects()
     world_objects.Player = player
     world_objects.camera = camera
+    world_objects.Goal = Goal(0, 0)
     world_objects.fps = actual_fps
 
     background_image = pygame.image.load("forest_background.png")
@@ -146,6 +148,9 @@ def main():
 
         for enemy in world_objects.Enemy:
             enemy.draw(screen, camera)
+
+        # Draw goal for the level
+        world_objects.Goal.draw(screen, camera)
         
         # Draw player
         player.draw(screen, camera)

@@ -7,6 +7,7 @@ class WorldObjects:
         self.camera = None
         self.platforms = []
         self.Enemy = []
+        self.Goal = None
         self.fps = 0
         self.current_level = ''
         self.width = 0
@@ -35,6 +36,7 @@ class WorldObjects:
         from Mouse import Mouse
         from Cardinal import Cardinal
         from Hairball import Hairball
+        from Goal import Goal
         self.new_level()
 
         self.platforms = []
@@ -108,6 +110,16 @@ class WorldObjects:
                 target = Platform(x, y, width, height)
                 self.platforms.append(target)
                 platform_name_list.append(name)
+            elif input_type == 'Goal':
+                target = Goal(0, 0)
+                target.x = x
+                target.y = y
+                if len(platform_name) > 0:
+                    indices = [i for i, x in enumerate(platform_name_list) if x == platform_name]
+                    match_index = indices[0]
+                    match_platform = self.platforms[match_index]
+                    target.y = match_platform.y - target.height
+                self.Goal = target
             elif input_type == 'Enemy':
                 this_enemy = arg_container["type"]
                 target = enemy_types[this_enemy](x, y)
