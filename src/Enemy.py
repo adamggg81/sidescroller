@@ -90,6 +90,11 @@ class Enemy(Character):
 
 
                 if did_collide:
+                    # check to die on collision
+                    if self.collision_kills:
+                        self.die()
+                    if enemy.collision_kills:
+                        enemy.die()
                 #if self.character_collision(enemy):
                     direction_change = False
                     if self.y + self.height - self.vel_y <= enemy.y - enemy.vel_y:

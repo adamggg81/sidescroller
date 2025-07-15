@@ -35,6 +35,7 @@ class WorldObjects:
         from Frog import Frog
         from Mouse import Mouse
         from Cardinal import Cardinal
+        from OrangeCat import OrangeCat
         from Hairball import Hairball
         from Goal import Goal
         self.new_level()
@@ -52,6 +53,7 @@ class WorldObjects:
             "Frog": Frog,
             "Mouse": Mouse,
             "Cardinal": Cardinal,
+            "OrangeCat": OrangeCat,
             "Hairball": Hairball
         }
 

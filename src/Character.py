@@ -88,6 +88,9 @@ class Character:
                 self.current_direction = -1*self.current_direction
             else:
                 self.vel_x = 0
+        # if collision kills, die on platform collision
+        if self.collision_kills and target_platform is not None:
+            self.die()
 
         # set y velocity to 0 if on the ground
         # also if gravity tries to push through the ground, reset y position
@@ -99,10 +102,14 @@ class Character:
             self.x = 0
             self.vel_x = -1 * self.vel_x
             self.current_direction = 1
+            if self.collision_kills:
+                self.die()
         elif self.x + self.width > world_objects.width:
             self.x = world_objects.width - self.width
             self.vel_x = -1*self.vel_x
             self.current_direction = -1
+            if self.collision_kills:
+                self.die()
 
         # Check hitting the "Ceiling"
         if self.y < 0:
