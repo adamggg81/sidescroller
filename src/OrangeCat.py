@@ -16,7 +16,7 @@ class OrangeCat(Enemy):
 
         self.width = 74
         self.height = 57
-        self.speed = 3
+        self.speed = 2
         # OrangeCat jump power is only to bounce when enemy jumps up into his feet
         self.jump_power = -20
         self.jumping = False
@@ -77,14 +77,21 @@ class OrangeCat(Enemy):
         if y_diff1 <= self.y_range or y_diff2 <= self.y_range:
             y_in_range = True
         if x_in_range and y_in_range and self.stun_timer >= self.stun_threshold:
-            self.is_shooting = True
-            self.vel_x = 0
-            if self.x > player.x:
-                self.image_number = 1
-                self.current_direction = -1
-            else:
-                self.image_number = 0
-                self.current_direction = 1
+            # Only shoot if already facing player
+            facing_player = False
+            if self.x > player.x and self.current_direction == -1:
+                facing_player = True
+            if self.x < player.x and self.current_direction == 1:
+                facing_player = True
+            if facing_player:
+                self.is_shooting = True
+                self.vel_x = 0
+                if self.x > player.x:
+                    self.image_number = 1
+                    self.current_direction = -1
+                else:
+                    self.image_number = 0
+                    self.current_direction = 1
 
         if self.is_shooting and self.shoot_timer == 0:
             new_ball = Hairball(0, self.y)
