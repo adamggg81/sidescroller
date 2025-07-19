@@ -24,6 +24,8 @@ class Character:
         self.on_ground = False
         self.floor_kills = True
         self.alive = True
+        self.max_health = 1
+        self.health = 1
         self.current_direction = 0
         self.bounce_off_walls = False
         self.invincible_timer = 0

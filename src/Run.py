@@ -7,6 +7,7 @@ from Frog import Frog
 from Mouse import Mouse
 from Cardinal import Cardinal
 from Hairball import Hairball
+from StaticImage import StaticImage
 from Goal import Goal
 import globals as GLOBAL
 from WorldObjects import WorldObjects
@@ -48,6 +49,14 @@ def main():
     
     # Create camera
     camera = Camera()
+
+    # Create player hearts
+    heart_list = []
+    for j in range(player.max_health):
+        new_heart = StaticImage('heart')
+        new_heart.x = 770 - j*15
+        new_heart.y = 20
+        heart_list.append(new_heart)
 
     jump_keys = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
 
@@ -151,6 +160,10 @@ def main():
 
         # Draw goal for the level
         world_objects.Goal.draw(screen, camera)
+
+        # Draw player hearts
+        for j in range(player.health):
+            heart_list[j].draw(screen, camera)
         
         # Draw player
         player.draw(screen, camera)

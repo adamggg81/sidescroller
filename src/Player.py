@@ -20,6 +20,8 @@ class Player(Character):
         # self.vel_y = 0
         self.speed = 5
         self.jump_power = -15
+        self.max_health = 3
+        self.health = self.max_health
         self.floor_kills = True
         self.god_mode = False
         self.respawn_timer = 0
@@ -62,6 +64,7 @@ class Player(Character):
         self.y = self.initial_y
         self.vel_x = 0
         self.vel_y = 0
+        self.health = self.max_health
         self.alive = True
         self.invincible_timer = 0
         # reload the current level on respawn
@@ -106,9 +109,15 @@ class Player(Character):
                         enemy.vel_y = 0
                         enemy.stun_timer = 0
                     else:
-                        self.die()
+                        if self.invincible_timer == self.invincible_threshold:
+                            self.health = self.health - 1
+                            self.invincible_timer = 0
                 else:
-                    self.die()
+                    if self.invincible_timer == self.invincible_threshold:
+                        self.health = self.health - 1
+                        # Quirk:  need to also set invincible timer to 0  because of the way die function operates
+                        # May need to change this behavior
+                        self.invincible_timer = 0
 
         # There was a bug when multiple enemies were bounced upon
         # After setting position and velocity for the first collision, the second caused death
@@ -116,6 +125,11 @@ class Player(Character):
         if bounce_up:
             self.vel_y = 0.75*self.jump_power
             self.y = top_bounce
+
+        # Resolve health
+        if self.health <= 0:
+            self.invincible_timer = self.invincible_threshold
+            self.die()
 
     def jump(self):
         if self.on_ground and not self.jumping:
