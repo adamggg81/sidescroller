@@ -29,7 +29,7 @@ class Character:
         self.current_direction = 0
         self.bounce_off_walls = False
         self.invincible_timer = 0
-        self.invincible_threshold = 1.5
+        self.invincible_threshold = 1
         self.stun_threshold = 1
         self.stun_timer = self.stun_threshold
         self.current_platform = None

@@ -26,6 +26,9 @@ class Player(Character):
         self.god_mode = False
         self.respawn_timer = 0
         self.respawn_threshold = 1
+        self.allow_user_control = True
+        self.control_timer = 0
+        self.control_threshold = 0.2
         # self.jumping = False
         # self.gravity = 0.8
         # self.on_ground = False
@@ -75,6 +78,11 @@ class Player(Character):
         self.respawn_timer = self.respawn_timer + 1 / world_objects.fps
         if self.respawn_timer > self.respawn_threshold:
             self.respawn_timer = self.respawn_threshold
+
+        self.control_timer = self.control_timer + 1 / world_objects.fps
+        if self.control_timer > self.control_threshold:
+            self.control_timer = self.control_threshold
+            self.allow_user_control = True
 
         if not self.alive:
             if self.respawn_timer == self.respawn_threshold:
@@ -126,12 +134,14 @@ class Player(Character):
                     enemy.current_direction = -1
                     direction_change = True
                     #self.x = enemy.x + enemy.width
+                    self.vel_x = self.speed
                 else:
                     # self is left of enemy
                     #self.current_direction = -1
                     enemy.current_direction = 1
                     direction_change = True
                     #self.x = enemy.x - self.width
+                    self.vel_x = -1*self.speed
                 if direction_change:
                     #self.vel_x = self.current_direction * self.speed
                     enemy.vel_x = enemy.current_direction * enemy.speed
@@ -155,6 +165,8 @@ class Player(Character):
                     # Quirk:  need to also set invincible timer to 0  because of the way die function operates
                     # May need to change this behavior
                     self.invincible_timer = 0
+                    self.allow_user_control = False
+                    self.control_timer = 0
 
 
         # bounce_up = False

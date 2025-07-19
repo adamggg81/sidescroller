@@ -96,10 +96,11 @@ def main():
         keys = pygame.key.get_pressed()
         
         # Reset horizontal velocity
-        player.stop_horizontal()
+        if player.allow_user_control:
+            player.stop_horizontal()
         
         # Movement controls
-        if player.alive:
+        if player.alive and player.allow_user_control:
             if keys[pygame.K_LEFT] or keys[pygame.K_a]:
                 player.move_left()
             if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
