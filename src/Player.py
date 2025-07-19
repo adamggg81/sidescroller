@@ -94,37 +94,100 @@ class Player(Character):
             elif self.y+self.height >= goal.y+goal.height-goal.y_offset:
                 self.die()
 
-        bounce_up = False
-        top_bounce = world_objects.height
+
+        # Test new enemy collision system with bounce back
+        head_hit = False
+        target_enemy = None
+        enemy_collision = False
         for enemy in world_objects.Enemy:
             if self.character_collision(enemy):
-                # Test code for making enemy die upon player collision.  Not finished.  Testing for Hairball
+                target_enemy = enemy
+                enemy_collision = True
                 if enemy.collision_kills:
                     enemy.die()
-                if enemy.jump_on_head:
-                    if self.y + self.height - self.vel_y <= enemy.y - enemy.vel_y:
-                        if enemy.y - self.height < top_bounce:
-                            top_bounce = enemy.y - self.height
-                        bounce_up = True
-                        enemy.vel_y = 0
-                        enemy.stun_timer = 0
+                direction_change = False
+                if self.y + self.height - self.vel_y <= enemy.y - enemy.vel_y:
+                    # self jumps on top of enemy
+                    self.vel_y = 0.75 * self.jump_power
+                    self.y = enemy.y - self.height
+                    enemy.vel_y = 0
+                    head_hit = True
+                elif enemy.y + enemy.height - enemy.vel_y <= self.y - self.vel_y:
+                    # enemy jumps on top of self
+                    enemy.vel_y = 0.75 * enemy.jump_power
+                    # special case:  enemy has no jump power: instead redirect self
+                    if enemy.jump_power == 0:
+                        self.vel_y = -1 * self.vel_y / 10
                     else:
-                        if self.invincible_timer == self.invincible_threshold:
-                            self.health = self.health - 1
-                            self.invincible_timer = 0
+                        self.vel_y = 0
+                elif self.x > enemy.x:
+                    # self is right of enemy
+                    #self.current_direction = 1
+                    enemy.current_direction = -1
+                    direction_change = True
+                    #self.x = enemy.x + enemy.width
                 else:
-                    if self.invincible_timer == self.invincible_threshold:
-                        self.health = self.health - 1
-                        # Quirk:  need to also set invincible timer to 0  because of the way die function operates
-                        # May need to change this behavior
-                        self.invincible_timer = 0
+                    # self is left of enemy
+                    #self.current_direction = -1
+                    enemy.current_direction = 1
+                    direction_change = True
+                    #self.x = enemy.x - self.width
+                if direction_change:
+                    #self.vel_x = self.current_direction * self.speed
+                    enemy.vel_x = enemy.current_direction * enemy.speed
+                    #self.change_direction_timer = 0
+                    enemy.change_direction_timer = 0
+                # reset platform bonding timer on collision
+                #self.platform_bonding_timer = 0
+                enemy.platform_bonding_timer = 0
+                break
 
-        # There was a bug when multiple enemies were bounced upon
-        # After setting position and velocity for the first collision, the second caused death
-        # The fix is to wait until after all collisions are resolved to set position and velocity
-        if bounce_up:
-            self.vel_y = 0.75*self.jump_power
-            self.y = top_bounce
+        if enemy_collision:
+            take_damage = True
+            if head_hit and target_enemy.jump_on_head:
+                take_damage = False
+                target_enemy.stun_timer = 0
+            if self.god_mode:
+                take_damage = False
+            if take_damage:
+                if self.invincible_timer == self.invincible_threshold:
+                    self.health = self.health - 1
+                    # Quirk:  need to also set invincible timer to 0  because of the way die function operates
+                    # May need to change this behavior
+                    self.invincible_timer = 0
+
+
+        # bounce_up = False
+        # top_bounce = world_objects.height
+        # for enemy in world_objects.Enemy:
+        #     if self.character_collision(enemy):
+        #         # Test code for making enemy die upon player collision.  Not finished.  Testing for Hairball
+        #         if enemy.collision_kills:
+        #             enemy.die()
+        #         if enemy.jump_on_head:
+        #             if self.y + self.height - self.vel_y <= enemy.y - enemy.vel_y:
+        #                 if enemy.y - self.height < top_bounce:
+        #                     top_bounce = enemy.y - self.height
+        #                 bounce_up = True
+        #                 enemy.vel_y = 0
+        #                 enemy.stun_timer = 0
+        #             else:
+        #                 if self.invincible_timer == self.invincible_threshold:
+        #                     self.health = self.health - 1
+        #                     self.invincible_timer = 0
+        #         else:
+        #             if self.invincible_timer == self.invincible_threshold:
+        #                 self.health = self.health - 1
+        #                 # Quirk:  need to also set invincible timer to 0  because of the way die function operates
+        #                 # May need to change this behavior
+        #                 self.invincible_timer = 0
+        #
+        # # There was a bug when multiple enemies were bounced upon
+        # # After setting position and velocity for the first collision, the second caused death
+        # # The fix is to wait until after all collisions are resolved to set position and velocity
+        # if bounce_up:
+        #     self.vel_y = 0.75*self.jump_power
+        #     self.y = top_bounce
 
         # Resolve health
         if self.health <= 0:
