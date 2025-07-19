@@ -74,6 +74,8 @@ class Character:
             # check if floor kills
             if self.floor_kills:
                 is_killed = True
+                # floor kills even when invincible timer is going
+                self.invincible_timer = self.invincible_threshold
 
         [is_on_platform, target_platform, wall_collision] = self.platform_collision(world_objects.platforms)
         if is_on_platform:
