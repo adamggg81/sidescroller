@@ -156,7 +156,13 @@ class Player(Character):
             take_damage = True
             if head_hit and target_enemy.jump_on_head:
                 take_damage = False
+                # enemy takes damage (unless the debug global flag is set to false)
+                # enemy doesn't take damage if stunned
+                if target_enemy.stun_timer >= target_enemy.stun_threshold and GLOBAL.enemy_takes_damage:
+                    target_enemy.health = target_enemy.health - 1
                 target_enemy.stun_timer = 0
+                if target_enemy.health <= 0:
+                    target_enemy.die()
             if self.god_mode:
                 take_damage = False
             if take_damage:

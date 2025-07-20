@@ -23,6 +23,7 @@ class Frog(Enemy):
         self.jump_threshold = 1.2
 
         self.jump_on_head = True
+        self.health = 2
         self.current_direction = 0
         self.change_direction_timer = 0
         self.change_direction_threshold = 0.75

@@ -12,3 +12,6 @@ GREEN = (50, 255, 50)
 GRAY = (128, 128, 128)
 
 gravity = 0.8
+
+# debug flag in case making enemies invincible is convenient
+enemy_takes_damage = True

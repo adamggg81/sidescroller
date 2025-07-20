@@ -26,6 +26,7 @@ class OrangeCat(Enemy):
         self.y_range = 75
 
         self.jump_on_head = True
+        self.health = 2
         self.current_direction = -1
         self.is_shooting = False
         self.shoot_timer = 0
