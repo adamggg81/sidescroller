@@ -23,6 +23,7 @@ class Character:
         self.obey_gravity = True
         self.on_ground = False
         self.floor_kills = True
+        self.sink_in_floor = False
         self.alive = True
         self.max_health = 1
         self.health = 1
@@ -67,8 +68,13 @@ class Character:
         # Ground collision (simple floor at bottom of screen)
         top_ground = world_objects.height - GLOBAL.GROUND_HEIGHT
         if self.y + self.height >= top_ground:
-            self.y = top_ground - self.height
-            self.on_ground = True
+            if self.sink_in_floor:
+                if self.y > world_objects.height:
+                    self.y = world_objects.height
+                    self.on_ground = True
+            else:
+                self.y = top_ground - self.height
+                self.on_ground = True
             self.current_platform = None
 
             # check if floor kills
