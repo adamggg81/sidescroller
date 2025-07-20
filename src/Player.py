@@ -152,6 +152,9 @@ class Player(Character):
                 enemy.platform_bonding_timer = 0
                 break
 
+        # resolve non-movement details of collision
+        # 1) dealing damage to enemy when jumping on its head (when applicable)
+        # 2) dealing damage to player
         if enemy_collision:
             take_damage = True
             if head_hit and target_enemy.jump_on_head:
@@ -173,6 +176,9 @@ class Player(Character):
                     self.invincible_timer = 0
                     self.allow_user_control = False
                     self.control_timer = 0
+                    # give the bounce back a little y-velocity.  looks better
+                    if self.on_ground:
+                        self.vel_y = self.jump_power / 3
 
 
         # bounce_up = False
