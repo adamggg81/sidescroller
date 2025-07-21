@@ -22,6 +22,9 @@ class Character:
         self.gravity = GLOBAL.gravity
         self.obey_gravity = True
         self.on_ground = False
+        # on_wall and wall_side used for wall jumping checks
+        self.on_wall = False
+        self.wall_side = -1
         self.floor_kills = True
         self.sink_in_floor = False
         self.alive = True
@@ -76,6 +79,7 @@ class Character:
                 self.y = top_ground - self.height
                 self.on_ground = True
             self.current_platform = None
+            self.on_wall = False
 
             # check if floor kills
             if self.floor_kills:
@@ -83,16 +87,50 @@ class Character:
                 # floor kills even when invincible timer is going
                 self.invincible_timer = self.invincible_threshold
 
+        # If on wall, check if still on wall
+        # A wall jump can only occur when linked to the wall
+        if self.on_wall:
+            # assume no longer on wall.  Must prove it is still true
+            self.on_wall = False
+            wall = self.current_platform
+            if not isinstance(wall, Platform):
+                raise ValueError("Bug:  wall not a platform")
+            wall_left = wall.x
+            wall_right = wall.x + wall.width
+            on_left = False
+            on_right = False
+            on_vertical = False
+            # 5 pixel player error relief
+            wall_relief = 5
+            if self.wall_side == -1 and self.x + self.width + wall_relief >= wall_left:
+                on_left = True
+            if self.wall_side == 1 and self.x - wall_relief <= wall_right:
+                on_right = True
+            if on_left or on_right:
+                wall_top = wall.y
+                wall_bottom = wall.y + wall.height
+                my_feet = self.y + self.height
+                # For now, consider "feet" (bottom of character) within wall boundaries
+                if wall_bottom >= my_feet >= wall_top:
+                    on_vertical = True
+
+                if on_vertical:
+                    self.on_wall = True
+
         [is_on_platform, target_platform, wall_collision] = self.platform_collision(world_objects.platforms)
         if is_on_platform:
             self.y = target_platform.y - self.height
             self.on_ground = True
+            self.on_wall = False
             self.current_platform = target_platform
         elif wall_collision == -1:
             self.x = target_platform.x - self.width
         elif wall_collision == 1:
             self.x = target_platform.x + target_platform.width
         if abs(wall_collision) == 1:
+            self.on_wall = True
+            self.current_platform = target_platform
+            self.wall_side = wall_collision
             if self.bounce_off_walls:
                 self.vel_x = -1*self.vel_x
                 self.current_direction = -1*self.current_direction

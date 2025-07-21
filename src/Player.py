@@ -221,6 +221,13 @@ class Player(Character):
     def jump(self):
         if self.on_ground and not self.jumping:
             self.vel_y = self.jump_power
+        # Wall jump check
+        if self.on_wall and not self.jumping:
+            self.vel_y = self.jump_power
+            self.vel_x = self.speed * self.wall_side
+            self.allow_user_control = False
+            # Using the same timer as enemy bounce back.  Maybe need a different timer eventually
+            self.control_timer = 0
         # The jumping property forces release of jump key before jump can happen again
         self.jumping = True
 
