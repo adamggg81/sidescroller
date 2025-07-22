@@ -16,7 +16,7 @@ class JumpFish(Enemy):
         self.width = 40
         self.height = 60
         self.speed = 0
-        self.jump_power = -13
+        self.jump_power = -15
         self.jumping = False
         self.floor_kills = False
         self.jump_timer = 0

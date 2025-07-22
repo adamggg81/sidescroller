@@ -16,6 +16,8 @@ class Player(Character):
         # self.y = y
         self.width = 40
         self.height = 60
+        self.nominal_height = self.height
+        self.crouch_height = 46
         # self.vel_x = 0
         # self.vel_y = 0
         self.speed = 5
@@ -37,12 +39,17 @@ class Player(Character):
         # self.initial_y = y
         # self.image_list = []
         self.image_list_invincible = []
+        self.image_list_crouch = []
 
         # self.image = pygame.image.load("player.png").convert_alpha()
         image_list = ["coco_right.png", "coco_left.png"]
+        crouch_image_list = ["coco_right_crouch.png", "coco_left_crouch.png"]
         for j in range(len(image_list)):
             self.image_list.append(pygame.image.load(image_list[j]).convert_alpha())
             self.image_list[j].set_colorkey(GLOBAL.WHITE)
+
+            self.image_list_crouch.append(pygame.image.load(crouch_image_list[j]).convert_alpha())
+            self.image_list_crouch[j].set_colorkey(GLOBAL.WHITE)
 
             invincible_image = image_list[j].replace('.png', '_invincible.png')
             self.image_list_invincible.append(pygame.image.load(invincible_image).convert_alpha())
@@ -243,6 +250,20 @@ class Player(Character):
     def stop_horizontal(self):
         self.vel_x = 0
 
+    def crouch(self):
+        # Adjust height if transitioning from standing to crouching
+        if self.height == self.nominal_height:
+            self.height = self.crouch_height
+            # Also need to adjust the top y point
+            self.y = self.y + self.nominal_height - self.crouch_height
+
+    def stand(self):
+        # Adjust height if transitioning from crouching to standing
+        if self.height == self.crouch_height:
+            self.height = self.nominal_height
+            # Also need to adjust the top y point
+            self.y = self.y - self.nominal_height + self.crouch_height
+
     def draw(self, screen, camera):
         screen_x = self.x - camera.x
         screen_y = self.y - camera.y
@@ -261,6 +282,12 @@ class Player(Character):
         if self.invincible_timer < self.invincible_threshold:
             if math.floor(self.invincible_timer / 0.1) % 4 == 0:
                 self.image = self.image_list_invincible[self.image_number]
+
+        if self.height < self.nominal_height:
+            self.image = self.image_list_crouch[self.image_number]
+
+        # Need to re-fetch the rect because crouching/standing changes the player dimensions
+        self.rect = self.image.get_rect()
 
         self.rect.center = (screen_x + self.width / 2, screen_y + self.height / 2)
         screen.blit(self.image, self.rect)

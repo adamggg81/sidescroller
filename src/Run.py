@@ -27,15 +27,21 @@ class Camera:
         self.x = 0
         self.y = 0
         
-    def update(self, target, world_objects: WorldObjects):
+    def update(self, player: Player, world_objects: WorldObjects):
         # Follow the target (player) horizontally
         # Keep player roughly in center of screen
-        self.x = round(target.x - math.floor(GLOBAL.SCREEN_WIDTH / 2))
+        self.x = round(player.x - math.floor(GLOBAL.SCREEN_WIDTH / 2))
         
         # Clamp camera to world boundaries
         self.x = max(0, min(self.x, world_objects.width - GLOBAL.SCREEN_WIDTH))
 
-        self.y = round(target.y - math.floor(GLOBAL.SCREEN_HEIGHT / 2))
+        # When player crouches, don't move the camera
+        if player.height == player.crouch_height:
+            target_y = player.y - player.nominal_height + player.crouch_height
+        else:
+            target_y = player.y
+
+        self.y = round(target_y - math.floor(GLOBAL.SCREEN_HEIGHT / 2))
         self.y = max(0, min(self.y, world_objects.height - GLOBAL.SCREEN_HEIGHT))
 
 
@@ -105,6 +111,11 @@ def main():
                 player.move_left()
             if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
                 player.move_right()
+            # Pressing Down = Crouch, otherwise Stand
+            if keys[pygame.K_DOWN]:
+                player.crouch()
+            else:
+                player.stand()
             for j in range(len(jump_keys)):
                 if keys[jump_keys[j]]:
                     player.jump()
